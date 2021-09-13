@@ -156,7 +156,7 @@ const OwnPiece = (props) => {
         const checkedAratable = checkAratable(curCanMove);
 
         // console.log(curCanMove);
-        console.log(curCanMove);
+        // console.log(curCanMove);
         // console.log(select);
         setCanMove(checkedAratable);
         // setCanMove(curCanMove);
@@ -164,7 +164,7 @@ const OwnPiece = (props) => {
     
 
     const clickPiece = () => {
-        console.log(thisType);
+        // console.log(thisType);
         // console.log(select);
         // console.log(whitePieces);
         // console.log(blackPieces);

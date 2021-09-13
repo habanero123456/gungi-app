@@ -5,7 +5,7 @@ import { GameScreen } from "./components/index.js";
 
 export const PieceContext = createContext();
 
-let initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
+const initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
 // initPieces[64] = {type: 11, whose: 1, level: 1};
 // initPieces[84] = {type: 12, whose: 1, level: 1};
 // initPieces[62] = {type: 4, whose: 1, level: 1};
@@ -15,20 +15,32 @@ let initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
 // initPieces[32] = {type: 4, whose: 2, level: 2, under: {type: 4, whose: 1, level: 1}};
 
 // let emptyArr25 = new Array(25);
-let initOwnPieces = new Array(25 - 3);
-
+let initWhitePieces = new Array(25 - 3);
 for (let i = 0; i < 14; i++) {
-  initOwnPieces[i] = i;
+  initWhitePieces[i] = i;
 }
 for (let i = 3; i < 11; i++) {
-  initOwnPieces[i + 14 - 3] = i;
+  initWhitePieces[i + 14 - 3] = i;
 }
-initOwnPieces.push(4);
-initOwnPieces.push(4);
-initOwnPieces.push(10);
-
-initOwnPieces.sort(function(a, b) {
+initWhitePieces.push(4);
+initWhitePieces.push(4);
+initWhitePieces.push(10);
+initWhitePieces.sort(function(a, b) {
   return a - b;
+});
+
+let initBlackPieces = new Array(25 - 3);
+for (let i = 0; i < 14; i++) {
+  initBlackPieces[i] = i;
+}
+for (let i = 3; i < 11; i++) {
+  initBlackPieces[i + 14 - 3] = i;
+}
+initBlackPieces.push(4);
+initBlackPieces.push(4);
+initBlackPieces.push(10);
+initBlackPieces.sort(function(a, b) {
+  return b - a;
 });
 
 const App = () => {
@@ -39,12 +51,12 @@ const App = () => {
   const [ canMove, setCanMove ] = useState([]);
   const [ modal, setModal ] = useState(0);
   const [ attack, setAttack ] = useState({num: 0, offense: -1, defense: -1});
-  const [ whitePieces, setWhitePieces ] = useState(initOwnPieces);
-  const [ blackPieces, setBlackPieces ] = useState(initOwnPieces);
+  const [ whitePieces, setWhitePieces ] = useState(initWhitePieces);
+  const [ blackPieces, setBlackPieces ] = useState(initBlackPieces);
   const [ phase, setPhase ] = useState(0);
   const [ winner, setWinner ] = useState(0);
   const [ kifu, setKifu ] = useState([]);
-  const [ yomifu, setYomifu ] = useState({num: -1, type: -1});
+  const [ yomifu, setYomifu ] = useState("");
   const [ click, setClick ] = useState([{num: -1, type: -1, level: 0}]);
 
   useEffect(() => {

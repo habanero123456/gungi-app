@@ -27,43 +27,95 @@ const Params = (props) => {
     const { winner, setWinner } = useContext(PieceContext);
     const { kifu, setKifu } = useContext(PieceContext);
     const { yomifu, setYomifu } = useContext(PieceContext);
-    const { click, setlick } = useContext(PieceContext);
+    const { click, setClick } = useContext(PieceContext);
 
+    const kanji = ['師', '大', '中', '小', '兵', '侍', '忍', '馬', '弓', '砦', '槍', '謀', '砲', '筒'];
+
+    let clickString1 = "";
+    let clickString2 = "";
+    let clickString3 = "";
+    if(click.level === 1) {
+        clickString1 = `${kanji[click.type]}`
+    } 
+    if(click.level === 2) {
+        clickString1 = `上段：${kanji[click.type]}`
+        clickString2 = `下段：${kanji[click.under.type]}`
+    }
+    if(click.level === 3) {
+        clickString1 = `上段：${kanji[click.type]}`
+        clickString2 = `中段：${kanji[click.under.type]}`
+        clickString3 = `下段：${kanji[click.under.under.type]}`
+    }
     const templateSet = () => {
         let templateSetSub = new Array(89).fill({type: -1, whose: 0, level: 0});
 
-        const culcuTemplateSet = (num, type) => {
+        const culcuTemplateSet = (num, type, level, under1, under2) => {
             const x = 8 - (num % 10);
             const y = 8 - ((num - (8 - x)) / 10);
             const oppNum = y * 10 + x;
-            templateSetSub.splice(num, 1, {type: type, whose: 1, level: 1});
-            templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 1});
+            if(level === 1) {
+                templateSetSub.splice(num, 1, {type: type, whose: 1, level: 1});
+                templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 1});
+            } 
+            if(level === 2) {
+                templateSetSub.splice(num, 1, {type: type, whose: 1, level: 2, under: {type: under1, whose: 1, level: 1}});
+                templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 2, under: {type: under1, whose: 2, level: 1}});
+            }
+            if(level === 3) {
+                templateSetSub.splice(num, 1, {type: type, whose: 1, level: 3, under: {type: under1, whose: 1, level: 2, under: {type: under2, whose: 1, level: 1}}});
+                templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 3, under: {type: under1, whose: 2, level: 2, under: {type: under2, whose: 2, level: 1}}});
+            }
+            
         }
-        culcuTemplateSet(84, 0);
-        culcuTemplateSet(71, 1);
-        culcuTemplateSet(77, 2);
-        culcuTemplateSet(83, 3);
-        culcuTemplateSet(85, 3);
-        culcuTemplateSet(63, 4);
-        culcuTemplateSet(65, 4);
-        culcuTemplateSet(62, 5);
-        culcuTemplateSet(66, 5);
-        culcuTemplateSet(60, 7);
-        culcuTemplateSet(68, 7);
-        culcuTemplateSet(82, 8);
-        culcuTemplateSet(86, 8);
-        culcuTemplateSet(61, 9);
-        culcuTemplateSet(67, 9);
-        culcuTemplateSet(80, 10);
-        culcuTemplateSet(88, 10);
-        culcuTemplateSet(64, 11);
-        culcuTemplateSet(81, 12);
-        culcuTemplateSet(87, 13);
+        culcuTemplateSet(84, 0, 1);
+        culcuTemplateSet(74, 12, 1);
+        culcuTemplateSet(64, 6, 1);
+        culcuTemplateSet(63, 4, 1);
+        culcuTemplateSet(65, 4, 1);
+        culcuTemplateSet(62, 7, 1);
+        culcuTemplateSet(66, 7, 1);
+        culcuTemplateSet(73, 1, 2, 6);
+        culcuTemplateSet(75, 2, 2, 13);
+        culcuTemplateSet(70, 5, 2, 10);
+        culcuTemplateSet(78, 5, 2, 10);
+        culcuTemplateSet(61, 3, 2, 4);
+        culcuTemplateSet(67, 3, 2, 4);
+        culcuTemplateSet(82, 8, 3, 9, 10);
+        culcuTemplateSet(86, 8, 3, 9, 11);
 
         return templateSetSub;
     }
     
     const start = () => {
+        const initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
+        let initWhitePieces = new Array(25 - 3);
+        for (let i = 0; i < 14; i++) {
+        initWhitePieces[i] = i;
+        }
+        for (let i = 3; i < 11; i++) {
+        initWhitePieces[i + 14 - 3] = i;
+        }
+        initWhitePieces.push(4);
+        initWhitePieces.push(4);
+        initWhitePieces.push(10);
+        initWhitePieces.sort(function(a, b) {
+        return a - b;
+        });
+
+        let initBlackPieces = new Array(25 - 3);
+        for (let i = 0; i < 14; i++) {
+        initBlackPieces[i] = i;
+        }
+        for (let i = 3; i < 11; i++) {
+        initBlackPieces[i + 14 - 3] = i;
+        }
+        initBlackPieces.push(4);
+        initBlackPieces.push(4);
+        initBlackPieces.push(10);
+
+        initBlackPieces.sort(function(a, b) {
+        return b - a;
+        });
         setPhase(1);
         setSelect({num: 90, type: 0, level: 1});
         let curCanMove = [];
@@ -72,8 +124,12 @@ const Params = (props) => {
                 curCanMove.push(10 * i + j);
             }
         }
-        setClickFlag(!clickFlag);
+        setPieces(initPieces);
+        setClickFlag(1);
         setCanMove(curCanMove);
+        setWhitePieces(initWhitePieces);
+        setBlackPieces(initBlackPieces);
+        setTurn(1);
     }
     const toggleWhose = (turn) => {
         if (turn === 1) {
@@ -95,8 +151,10 @@ const Params = (props) => {
     const quickStart = () => {
         setPhase(3);
         setPieces(templateSet());
-        setWhitePieces([4, 4, 6, 6, 10]);
-        setBlackPieces([4, 4, 6, 6, 10]);
+        setWhitePieces([]);
+        setBlackPieces([]);
+        setClickFlag(false);
+        setTurn(1);
     }
 
     if(phase === 0) {
@@ -132,6 +190,9 @@ const Params = (props) => {
                 >
                     済み
                 </Button>
+                <div>
+                    {yomifu}
+                </div>
             </div>
         )
     } else if (phase === 3) {
@@ -152,9 +213,18 @@ const Params = (props) => {
                 <div>
                     {numString}手目
                 </div>
-                {/* <div>
-                    {yomihu}
-                </div> */}
+                <div>
+                    {yomifu}
+                </div>
+                <div>
+                    {clickString1}
+                </div>
+                <div>
+                    {clickString2}
+                </div>
+                <div>
+                    {clickString3}
+                </div>
             </div>
         )
     } else if(phase === 4) {
