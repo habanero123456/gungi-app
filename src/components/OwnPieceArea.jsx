@@ -41,9 +41,7 @@ const OwnPieceArea = (props) => {
     const blackTypes = curBlackPieces.filter(function (x, i, self) {
         return self.indexOf(x) === i;
     });
-    const renderPiece = (piece) => {
 
-    }
     return(
         <div className={classes.squareContainer}>
                  {props.isWhite 

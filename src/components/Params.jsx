@@ -28,6 +28,9 @@ const Params = (props) => {
     const { kifu, setKifu } = useContext(PieceContext);
     const { yomifu, setYomifu } = useContext(PieceContext);
     const { click, setClick } = useContext(PieceContext);
+    const { bouFlagW, setBouFlagW } = useContext(PieceContext);
+    const { bouFlagB, setBouFlagB } = useContext(PieceContext);
+    const { bouCheck, setBouCheck } = useContext(PieceContext);
 
     const kanji = ['師', '大', '中', '小', '兵', '侍', '忍', '馬', '弓', '砦', '槍', '謀', '砲', '筒'];
 
@@ -85,7 +88,22 @@ const Params = (props) => {
 
         return templateSetSub;
     }
-    
+    const checkBou = () => {
+        const curWPiece = pieces.filter((piece) => {
+            return piece.whose === 1;
+        })
+        const curBPiece = pieces.filter((piece) => {
+            return piece.whose === 2;
+        })
+        const checkBouW = curWPiece.some((piece) => {
+            return piece.type === 11;
+        })
+        const checkBouB = curBPiece.some((piece) => {
+            return piece.type === 11;
+        })
+        setBouCheck([checkBouW, checkBouB]);
+    }
+
     const start = () => {
         const initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
         let initWhitePieces = new Array(25 - 3);
@@ -125,7 +143,8 @@ const Params = (props) => {
             }
         }
         setPieces(initPieces);
-        setClickFlag(1);
+        setYomifu([]);
+        setClickFlag(false);
         setCanMove(curCanMove);
         setWhitePieces(initWhitePieces);
         setBlackPieces(initBlackPieces);
@@ -146,10 +165,12 @@ const Params = (props) => {
             setTurn(oppTurn);
         }
         setPhase(curPhase + 1);
+        checkBou();
     }
 
     const quickStart = () => {
         setPhase(3);
+        setYomifu([]);
         setPieces(templateSet());
         setWhitePieces([]);
         setBlackPieces([]);
@@ -180,16 +201,87 @@ const Params = (props) => {
             
         )
     } else if(phase === 1 || phase === 2) {
+        let sumiBotton;
+        if(phase === 1) {
+            if(turn === 2) {
+                if(bouFlagW === false){
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    className={classes.button1}
+                                >
+                                    済み
+                                </Button>;
+                } else {
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    className={classes.button1}
+                                    onClick={() => endPut()}
+                                >
+                                    済み
+                                </Button>
+                }
+            } else {
+                if(bouFlagB === false){
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    className={classes.button1}
+                                >
+                                    済み
+                                </Button>;
+                } else {
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    className={classes.button1}
+                                    onClick={() => endPut()}
+                                >
+                                    済み
+                                </Button>
+                }
+            }
+        } else {
+            if(turn === 1) {
+                if(bouFlagW === false){
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    className={classes.button1}
+                                >
+                                    済み
+                                </Button>;
+                } else {
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    className={classes.button1}
+                                    onClick={() => endPut()}
+                                >
+                                    済み
+                                </Button>
+                }
+            } else {
+                if(bouFlagB === false){
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    className={classes.button1}
+                                >
+                                    済み
+                                </Button>;
+                } else {
+                    sumiBotton = <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    className={classes.button1}
+                                    onClick={() => endPut()}
+                                >
+                                    済み
+                                </Button>
+                }
+            }
+        }
         return(
             <div className={classes.paramsContainer}>
-                <Button 
-                            variant="contained" 
-                            color="primary" 
-                            className={classes.button1}
-                            onClick={() => endPut()}
-                >
-                    済み
-                </Button>
+                {sumiBotton}
                 <div>
                     {yomifu}
                 </div>
@@ -203,8 +295,6 @@ const Params = (props) => {
         } else {
             turnString += "黒";
         }
-        // const yomihu = `piece${select.type}-${select.whose}-${select.level}`;
-        // const yomihu = `${select}`;
         return (
             <div>
                 <div>

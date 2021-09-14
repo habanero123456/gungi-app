@@ -59,6 +59,10 @@ const Piece = (props) => {
     const { kifu, setKifu } = useContext(PieceContext);
     const { yomifu, setYomifu } = useContext(PieceContext);
     const { click, setClick } = useContext(PieceContext);
+    const { firstArata, setFirstArata } = useContext(PieceContext);
+    const { bouFlagW, setBouFlagW } = useContext(PieceContext);
+    const { bouFlagB, setBouFlagB } = useContext(PieceContext);
+    const { bouCheck, setBouCheck } = useContext(PieceContext);
     
     const thisNum = 10 * (props.column - 1) + 9 - props.row;
 
@@ -96,6 +100,22 @@ const Piece = (props) => {
         const newKifu = Array.from(kifu);
         newKifu.push(thisPieces);
         setKifu(newKifu);
+    }
+
+    const checkBou = () => {
+        const curWPiece = curPieces.filter((piece) => {
+            return piece.whose === 1;
+        })
+        const curBPiece = curPieces.filter((piece) => {
+            return piece.whose === 2;
+        })
+        const checkBouW = curWPiece.some((piece) => {
+            return piece.type === 11;
+        })
+        const checkBouB = curBPiece.some((piece) => {
+            return piece.type === 11;
+        })
+        setBouCheck([checkBouW, checkBouB]);
     }
 
     //攻撃
@@ -150,6 +170,7 @@ const Piece = (props) => {
                 // setYomifu(`${x}-${y}-${thisPiece.level}-${kanji[thisPiece.type]}`);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
                 setClickFlag(!clickFlag);
+                checkBou();
             }
             //ツケる
             if(attack.num === 3) {
@@ -215,6 +236,7 @@ const Piece = (props) => {
                 addKifu(curPieces);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
                 setClickFlag(!clickFlag);
+                checkBou();
             }
             setPieces(curPieces);
             setSelect({num: -1, type: -1, level: 0});
@@ -264,7 +286,6 @@ const Piece = (props) => {
                     return (y + dy) * 10 + x + dx;
                 }
             } else {
-                console.log(whose);
                 const dx = xy[0];
                 const dy = -xy[1];
                 if(x + dx >= 0 && x + dx <= 9 && y + dy >= 0 && y + dy <= 9) {
@@ -593,11 +614,12 @@ const Piece = (props) => {
     const clickPiece = () => {
         if (phase === 3) {
             //選択
+            setClick(curPieces[thisNum]);
             if (thisClickFlag === false) {
                 if (thisPiece.whose === turn){
                     setClickFlag(!thisClickFlag);
                     setSelect({num: thisNum, type: curPieces[thisNum].type, level: curPieces[thisNum].level});
-                    setClick(curPieces[thisNum]);
+                    // setClick(curPieces[thisNum]);
                     searchCanMove();
                 }
             }else{
@@ -605,7 +627,7 @@ const Piece = (props) => {
                 if(select.num === thisNum){
                     setClickFlag(!clickFlag);
                     setSelect({num: -1, type: -1, level: 0});
-                    setClick({type: -1, whose: 0, level: 0})
+                    // setClick({type: -1, whose: 0, level: 0})
                     setCanMove([]);
                 }
             }
@@ -641,6 +663,7 @@ const Piece = (props) => {
                     }
                     setClickFlag(!clickFlag);
                     addKifu(curPieces);
+                    checkBou();
                 }
                 //自駒
                 else if (curPieces[thisNum].whose === turn){
@@ -695,6 +718,7 @@ const Piece = (props) => {
                 setSelect({num: -1, type: -1, level: 0});
                 setCanMove([]);
                 setTurn(oppTurn);
+                console.log(bouCheck);
             }
         } else if (phase === 1 || phase === 2) {
             if (canMove.includes(thisNum)){
@@ -705,13 +729,49 @@ const Piece = (props) => {
                         newWhitePieces.splice(arataIndex, 1);
                         setWhitePieces(newWhitePieces);
                         curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 1});
-                        // console.log(newWhitePieces);
+                        let curCanMove = [];
+                        for (let i = 0; i < 3; i++) {
+                            for (let j = 0; j < 9; j++) {
+                                curCanMove.push(10 * i + j);
+                            }
+                        }
+                        if(firstArata === false) {
+                            setSelect({num: 91, type: 0, level: 1});
+                            setCanMove(curCanMove);
+                            setFirstArata(true);
+                        } else {
+                            setSelect({num: -1, type: -1, level: 0});
+                            setCanMove([]);
+                        }
+                        setClickFlag(!clickFlag);
+                        setPieces(curPieces);
+                        setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
+                        // addKifu(curPieces);
+                        if(phase === 1) {
+                            setTurn(oppTurn);
+                        } 
+                        if(select.type === 11) {
+                            setBouFlagW(true);
+                        }
                     }else if(select.num === 91) {
                         let newBlackPieces = Array.from(blackPieces);
                         const arataIndex = newBlackPieces.indexOf(select.type);
                         newBlackPieces.splice(arataIndex, 1);
                         setBlackPieces(newBlackPieces);
                         curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 1});
+
+                        setClickFlag(!clickFlag);
+                        setPieces(curPieces);
+                        setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
+                        // addKifu(curPieces);
+                        setSelect({num: -1, type: -1, level: 0});
+                        setCanMove([]);
+                        if(phase === 1) {
+                            setTurn(oppTurn);
+                        } 
+                        if(select.type === 11) {
+                            setBouFlagB(true);
+                        }
                     }
                 } else if (curPieces[thisNum].whose === turn){
                     if(select.num === 90){
@@ -747,31 +807,25 @@ const Piece = (props) => {
                         }
                         curPieces.splice(thisNum, 1, newPiece);
                     }
+                    setClickFlag(!clickFlag);
+                    setPieces(curPieces);
+                    setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
+                    // addKifu(curPieces);
+                    setSelect({num: -1, type: -1, level: 0});
+                    setCanMove([]);
+                    if(phase === 1) {
+                        setTurn(oppTurn);
+                    } 
                 }
-                setClickFlag(!clickFlag);
-                setPieces(curPieces);
-                setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
-                // addKifu(curPieces);
-                setSelect({num: -1, type: -1, level: 0});
-                setCanMove([]);
-                if(phase === 1) {
-                    setTurn(oppTurn);
-                } 
             }
-            
+            console.log(firstArata);
         }
-        console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
-        // console.log(kifu);
-        // console.log(yomifu);
-        // console.log(select);
-        // console.log(pieces);
+            console.log(turn);
+            console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
     }
     return(
         <button className={classes.square} onClick={() =>{clickPiece()}}>
-   
             <div className={classString} style={{ backgroundImage: `url(/images/${thisPieceString}.png)`}}></div>
-            {/* <div className={classString} style={{ backgroundImage: `url(/images/${thisPieceString}.png)`}}></div> */}
-
         </button>
     )
 }

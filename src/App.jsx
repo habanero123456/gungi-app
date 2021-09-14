@@ -58,6 +58,10 @@ const App = () => {
   const [ kifu, setKifu ] = useState([]);
   const [ yomifu, setYomifu ] = useState("");
   const [ click, setClick ] = useState([{num: -1, type: -1, level: 0}]);
+  const [ firstArata, setFirstArata ] = useState(false);
+  const [ bouFlagW, setBouFlagW ] = useState(false);
+  const [ bouFlagB, setBouFlagB ] = useState(false);
+  const [ bouCheck, setBouCheck ] = useState([false, false]);
 
   useEffect(() => {
       // console.log(canMove);
@@ -65,7 +69,7 @@ const App = () => {
   
   return(
     <div>
-      <PieceContext.Provider value={{pieces, setPieces, turn, setTurn, select, setSelect, clickFlag, setClickFlag, canMove, setCanMove, modal, setModal, attack, setAttack, whitePieces, setWhitePieces, blackPieces, setBlackPieces, phase, setPhase, winner, setWinner, kifu, setKifu,  yomifu, setYomifu, click, setClick}}>
+      <PieceContext.Provider value={{pieces, setPieces, turn, setTurn, select, setSelect, clickFlag, setClickFlag, canMove, setCanMove, modal, setModal, attack, setAttack, whitePieces, setWhitePieces, blackPieces, setBlackPieces, phase, setPhase, winner, setWinner, kifu, setKifu,  yomifu, setYomifu, click, setClick, firstArata, setFirstArata, bouFlagW, setBouFlagW, bouFlagB, setBouFlagB, bouCheck, setBouCheck}}>
         <GameScreen />
       </PieceContext.Provider>
     </div>

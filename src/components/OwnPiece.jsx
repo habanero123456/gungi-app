@@ -46,6 +46,7 @@ const OwnPiece = (props) => {
     const { attack, setAttack } = useContext(PieceContext);
     const { phase, setPhase } = useContext(PieceContext);
     const { click, setlick } = useContext(PieceContext);
+    const { bouCheck, setBouCheck } = useContext(PieceContext);
    
     const thisType = props.index;
     
@@ -98,16 +99,6 @@ const OwnPiece = (props) => {
     const thisPieceString = `piece${props.index}-${whoseNum}-${thisUnderColor}`;
 
     const curPieces = Array.from(pieces);
-    const someonesPiecesSub = curPieces.map((item, index) => {
-        if(item.whose != 0) {
-            return index;
-        } else {
-            return 0;
-        }
-    })
-    const someonesPieces = someonesPiecesSub.filter((item) => {
-        return item != 0;
-    })
 
     const toggleWhose = (whose) => {
         if (whose === 1) {
@@ -119,12 +110,10 @@ const OwnPiece = (props) => {
     const oppTurn = toggleWhose(turn);
 
     const checkAratable = (array) => {
-        const alones = [0, 9, 11, 12, 13];
         const checkCanMove = array.filter((item) => {
             if(item.type !== 0 && item.whose !== oppTurn && item.level !== 3) {
                 return true;
             }
-            // return item.type !== 0 && item.whose === turn;
         }).map((piece) => {
             return piece.index;
         })
@@ -136,7 +125,6 @@ const OwnPiece = (props) => {
         if(whoseNum === 1) {
             for (let i = 6; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    // curCanMove.push(10 * i + j);
                     curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
                 }
             }
@@ -145,30 +133,21 @@ const OwnPiece = (props) => {
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 9; j++) {
                     curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
-                    // curCanMove.push(10 * i + j);
                 }
             }
         }
-        const noonePieces = curCanMove.filter((item) => {
-            return !someonesPieces.includes(item);
-        })
-        // setCanMove(noonePieces);
+
         const checkedAratable = checkAratable(curCanMove);
 
-        // console.log(curCanMove);
-        // console.log(curCanMove);
-        // console.log(select);
         setCanMove(checkedAratable);
-        // setCanMove(curCanMove);
     }
     
+    if(bouCheck[turn - 1] === true) {
+
+    }
 
     const clickPiece = () => {
-        // console.log(thisType);
-        // console.log(select);
-        // console.log(whitePieces);
-        // console.log(blackPieces);
-        if(phase !== 0) {
+        if(phase === 1 || phase === 2) {
             if (clickFlag === false) {
                 if (whoseNum === turn){
                     setClickFlag(!clickFlag);
@@ -181,6 +160,23 @@ const OwnPiece = (props) => {
                     setClickFlag(!clickFlag);
                     setSelect({num: -1, type: -1, level: 0});
                     setCanMove([]);
+                }
+            }
+        } else if(phase === 3) {
+            if(bouCheck[turn - 1] === true) {
+                if (clickFlag === false) {
+                    if (whoseNum === turn){
+                        setClickFlag(!clickFlag);
+                        setSelect({num: whoseNum + 89, type: thisType, level: 1});
+                        searchCanMove();
+                    }
+                }else{
+                    //選択解除
+                    if(select.num === whoseNum + 89){
+                        setClickFlag(!clickFlag);
+                        setSelect({num: -1, type: -1, level: 0});
+                        setCanMove([]);
+                    }
                 }
             }
         }
