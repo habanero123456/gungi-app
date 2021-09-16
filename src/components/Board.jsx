@@ -1,14 +1,13 @@
 import React from 'react';
 import { Piece } from "./index.js"
 import { makeStyles } from '@material-ui/core/styles';
+import useMedia from 'use-media';
 
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         margin: 0,
         width: '459px',
-    },
-    status: {
     },
     columnContainer: {
         flexDirection: 'column',
@@ -18,7 +17,21 @@ const useStyles = makeStyles((theme) => ({
         marginTop: -1,
         marginBottom: 2,
         height: 50,
-    }
+    },
+    containerM: {
+        display: 'flex',
+        margin: 0,
+        width: '369px',
+    },
+    columnContainerM: {
+        flexDirection: 'column',
+        display: 'flex',
+    },
+    rowContainerM: {
+        marginTop: -1,
+        marginBottom: 2,
+        height: 40,
+    },
   }));
 
 const Board = () => {
@@ -30,38 +43,43 @@ const Board = () => {
         />
     }
     const nineCount = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    return(
-        <div className={classes.container}>
-            {/* <div className={classes.status}>{status}</div> */}
-            <div className={classes.columnContainer}>
-                 {nineCount.map((columnInt) =>{
-                    return(
-                        <div className={classes.rowContainer}>
-                        {nineCount.map((rowInt) =>{
-                            return(renderPiece(columnInt, rowInt));
-                        })}
-                        </div>
-                    );
-                })}
+    const isWide = useMedia({minWidth: '769px'});
+    if(isWide){
+        return(
+            <div className={classes.container}>
+                {/* <div className={classes.status}>{status}</div> */}
+                <div className={classes.columnContainer}>
+                     {nineCount.map((columnInt) =>{
+                        return(
+                            <div className={classes.rowContainer}>
+                            {nineCount.map((rowInt) =>{
+                                return(renderPiece(columnInt, rowInt));
+                            })}
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-        </div>
-
-        // <div className="container">
-        // <div className="columnContainer">
-        //     <div className="rowContainer">
-        //     {nineCount.map((columnInt) =>{
-        //         return(
-        //             <div className="rowContainer">
-        //             {nineCount.map((rowInt) =>{
-        //                 return(renderPiece(columnInt, rowInt));
-        //             })}
-        //             </div>
-        //         );
-        //     })}
-        //     </div>
-        // </div>
-    // </div>
-    )
+        )
+    } else {
+        return(
+            <div className={classes.containerM}>
+                {/* <div className={classes.status}>{status}</div> */}
+                <div className={classes.columnContainerM}>
+                     {nineCount.map((columnInt) =>{
+                        return(
+                            <div className={classes.rowContainerM}>
+                            {nineCount.map((rowInt) =>{
+                                return(renderPiece(columnInt, rowInt));
+                            })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        )
+    }
+    
 }
 
 export default Board;

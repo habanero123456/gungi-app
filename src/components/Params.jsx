@@ -7,11 +7,22 @@ const useStyles = makeStyles((theme) => ({
     paramsContainer: {
         display: "flex",
         justifyContent: "center",
+        alignItems: "center",
         flexDirection: "column",
     },
     button1: {
-        margin: 5,
+        // margin: 5,
+        marginBottom: 10,
+        width: 160,
       },
+    bunttonContainer: {
+        // display: "flex",
+        // justifyContent: "space-between",
+    },
+    button2: {
+        // margin: 5,
+        marginBottom: 10,
+    },
   }));
 
 const Params = (props) => {
@@ -31,7 +42,10 @@ const Params = (props) => {
     const { bouFlagW, setBouFlagW } = useContext(PieceContext);
     const { bouFlagB, setBouFlagB } = useContext(PieceContext);
     const { bouCheck, setBouCheck } = useContext(PieceContext);
+    const { curKifu, setCurKifu } = useContext(PieceContext);
 
+
+    
     const kanji = ['師', '大', '中', '小', '兵', '侍', '忍', '馬', '弓', '砦', '槍', '謀', '砲', '筒'];
 
     let clickString1 = "";
@@ -67,8 +81,7 @@ const Params = (props) => {
             if(level === 3) {
                 templateSetSub.splice(num, 1, {type: type, whose: 1, level: 3, under: {type: under1, whose: 1, level: 2, under: {type: under2, whose: 1, level: 1}}});
                 templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 3, under: {type: under1, whose: 2, level: 2, under: {type: under2, whose: 2, level: 1}}});
-            }
-            
+            } 
         }
         culcuTemplateSet(84, 0, 1);
         culcuTemplateSet(74, 12, 1);
@@ -86,6 +99,8 @@ const Params = (props) => {
         culcuTemplateSet(82, 8, 3, 9, 10);
         culcuTemplateSet(86, 8, 3, 9, 11);
 
+        // templateSetSub.splice(44, 1, {type: 13, whose: 1, level: 1});
+        // templateSetSub.splice(44, 1, {type: 10, whose: 1, level: 2, under: {type: 1, whose: 1, level: 1}});
         return templateSetSub;
     }
     const checkBou = () => {
@@ -149,6 +164,7 @@ const Params = (props) => {
         setWhitePieces(initWhitePieces);
         setBlackPieces(initBlackPieces);
         setTurn(1);
+        setKifu([initPieces]);
     }
     const toggleWhose = (turn) => {
         if (turn === 1) {
@@ -176,6 +192,22 @@ const Params = (props) => {
         setBlackPieces([]);
         setClickFlag(false);
         setTurn(1);
+        setKifu([templateSet()])
+    }
+
+    const displayKifu = (direction) => {
+        if(direction === true) {
+            //戻る
+            const befCurKifu = curKifu;
+            setCurKifu(befCurKifu - 1); 
+            setPieces(kifu[befCurKifu - 1]);
+        } 
+        if(direction === false) {
+            //次
+            const befCurKifu = curKifu;
+            setCurKifu(befCurKifu + 1); 
+            setPieces(kifu[befCurKifu + 1]);
+        }
     }
 
     if(phase === 0) {
@@ -201,6 +233,7 @@ const Params = (props) => {
             
         )
     } else if(phase === 1 || phase === 2) {
+        const numString = `${kifu.length }`;
         let sumiBotton;
         if(phase === 1) {
             if(turn === 2) {
@@ -283,12 +316,16 @@ const Params = (props) => {
             <div className={classes.paramsContainer}>
                 {sumiBotton}
                 <div>
+                    {numString}手目
+                </div>
+                <div>
                     {yomifu}
                 </div>
             </div>
         )
     } else if (phase === 3) {
-        const numString = `${kifu.length + 1}`;
+        // const numString = `${kifu.length + 1}`;
+        const numString = `${kifu.length }`;
         let turnString = "";
         if(turn === 1) {
             turnString += "白";
@@ -296,7 +333,7 @@ const Params = (props) => {
             turnString += "黒";
         }
         return (
-            <div>
+            <div className={classes.paramsContainer}>
                 <div>
                     {turnString}番
                 </div>
@@ -318,17 +355,53 @@ const Params = (props) => {
             </div>
         )
     } else if(phase === 4) {
+        const numString = `${curKifu}`;
         let winnerString = "";
         if(winner === 1) {
             winnerString = "白";
         } else {
             winnerString = "黒";
         }
+        let prevKifuButton = "";
+        if(curKifu > 0) {
+            prevKifuButton = <Button
+                                variant="contained" 
+                                className={classes.button2}
+                                color="primary" 
+                                onClick={() => displayKifu(true)}
+                            >←</Button>
+        } else {
+            prevKifuButton = <Button
+                                variant="contained" 
+                                className={classes.button2}
+                            >←</Button>
+        }
+        let nextKifuButton = "";
+        if(curKifu < kifu.length - 1) {
+            nextKifuButton = <Button
+                                variant="contained" 
+                                className={classes.button2}
+                                color="primary" 
+                                onClick={() => displayKifu(false)}
+                            >→</Button>
+        } else {
+            nextKifuButton = <Button
+                                variant="contained" 
+                                className={classes.button2}
+                            >→</Button>
+        }
         return(
             <div className={classes.paramsContainer}>
                 <div>
+                    {numString}手目
+                </div>
+                <div>
                     勝者 :　{winnerString}
-                </div>    
+                </div> 
+                <div className={classes.bunttonContainer}>
+                    {prevKifuButton}
+                    {nextKifuButton}
+                </div>
                 <Button 
                             variant="contained" 
                             color="primary" 

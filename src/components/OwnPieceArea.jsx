@@ -5,21 +5,13 @@ import { OwnPiece } from "./index.js"
 
 const useStyles = makeStyles((theme) => ({
     squareContainer: {
-        marginTop: 20,
-        marginRight: 20,
-        marginLeft: 20,
         padding: 0,
         margin: '0 auto',
-        width: 62,
-        // height: '100px',
-        // flexWrap: "wrap",
-        // borderWidth: 10,
-        // borderColor: 'black',
+        width: 93,
     },
     squareContainerSub: {
-        height: 210,
+        height: 150,
         backgroundColor: "#F8BE75",
-        // marginTop: 20,
         border: '1px solid #333',
         display: 'flex',
         flexWrap: "wrap",

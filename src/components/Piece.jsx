@@ -1,15 +1,25 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { PieceContext } from '../App'
 import React, {useState, useContext, useEffect} from 'react'
-import { Autorenew } from '@material-ui/icons';
 import '../assets/styles/style.css'
-
-const test = "testPieceImg";
+import useMedia from 'use-media';
 
 const useStyles = makeStyles((theme) => ({
     square: {
         width: 52,
         height: 52,
+        borderWidth: 1,
+        borderColor: 'black',
+        boxSizing: "border-box",
+        marginLeft: -1,
+        backgroundColor: "#F8BE75",
+        borderSpacing: 0,
+        borderCollapse: "collapse",
+        boxSizing: "border-box",
+    },
+    squareM: {
+        width: 42,
+        height: 42,
         borderWidth: 1,
         borderColor: 'black',
         boxSizing: "border-box",
@@ -31,10 +41,15 @@ const useStyles = makeStyles((theme) => ({
         width: 50,
         height: 50,
     },
-    // blackPiece: {
-    //     transform: "scale(1, -1)",
-    //     margin: 0,
-    // },
+    pieceM: {
+        backgroundSize: "contain",
+        margin: 0,
+        borderColor: 'black',
+        borderWidth: 1,
+        // boxSizing: "border-box",
+        width: 40,
+        height: 40,
+    },
     selected: {
         backgroundColor: "#D0D0D0",
     },
@@ -63,6 +78,7 @@ const Piece = (props) => {
     const { bouFlagW, setBouFlagW } = useContext(PieceContext);
     const { bouFlagB, setBouFlagB } = useContext(PieceContext);
     const { bouCheck, setBouCheck } = useContext(PieceContext);
+    const { curKifu, setCurKifu } = useContext(PieceContext);
     
     const thisNum = 10 * (props.column - 1) + 9 - props.row;
 
@@ -70,11 +86,21 @@ const Piece = (props) => {
     const thisPiece = curPieces[thisNum];
 
     const thisClickFlag = clickFlag;
+    const isWide = useMedia({minWidth: '769px'});
 
-    let classString = `${classes.piece}`;
-    // if (thisPiece.whose === 2) {
-    //     classString  += ` ${classes.blackPiece}`;
-    // }
+    let squareString = "";
+    if(isWide) {
+        squareString = `${classes.square}`;
+    } else {
+        squareString = `${classes.squareM}`;
+    }
+    let classString = "";
+    if(isWide) {
+        classString = `${classes.piece}`;
+    } else {
+        classString = `${classes.pieceM}`;
+    }
+
     if (select.num === thisNum) {
         classString  += ` ${classes.selected}`;
     } 
@@ -141,27 +167,30 @@ const Piece = (props) => {
             
             //取る
             if(attack.num === 2) {
-                //レベル２，３のとき
+                //レベル３のとき
                 if(offenseLevel === 3) {
+                    //3が3をとる
                     if(offenseLevel === difenseLevel) {
-                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense]});
+                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense].under});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
                     } else if (offenseLevel - difenseLevel === 1) {
-                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 1, under: curPieces[attack.defense]});
+                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 1, under: curPieces[attack.defense].under});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
                     } else {
                         curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 2});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
                     }
+                //レベル２のとき
                 } else if(offenseLevel === 2) {
-                    //同レベをとる
+                    //2が2をとる
                     if(offenseLevel === difenseLevel) {
-                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense]});
+                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense].under});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
                     } else {
                         curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 1});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
                     }
+                //レベル１のとき
                 } else {
                     curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level});
                     curPieces.splice(attack.offense, 1, {type: 0, whose: 0, level: 0});
@@ -174,6 +203,7 @@ const Piece = (props) => {
             }
             //ツケる
             if(attack.num === 3) {
+                //新
                 let newPiece;
                 if(attack.offense >= 90) {
                     newPiece = {
@@ -350,6 +380,16 @@ const Piece = (props) => {
             }, []).filter((item) => {
                 if(thisPiece.type === 0 || thisPiece.type === 12 || thisPiece.type === 13) {
                     return true;
+                } else if(thisPiece.type === 9){
+                    if(thisPiece.level === 3){
+                        if(thisPiece.level !== item.level){
+                            return true;
+                        }
+                    } else {
+                        if(thisPiece.level >= item.level) {
+                            return true;
+                          }
+                    }
                 } else {
                     if(thisPiece.level >= item.level) {
                         return true;
@@ -489,20 +529,20 @@ const Piece = (props) => {
                 break;
             case 5 :
                 if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
                 } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
                     if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([0, 2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([2, 2], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[1])) {
-                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([2, -2], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([2, 0], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([-2, 2], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, 0], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([-2, -2], thisPiece.whose));
                     }
                 }
                 break;
@@ -525,20 +565,20 @@ const Piece = (props) => {
                 break;
             case 7 :
                 if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
                 } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
                     if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([2, 2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([0, 2], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[1])) {
-                        canMoveNum.push(moveCalculate([2, -2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([-2, 2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([2, 0], thisPiece.whose));
                     }
                     if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, -2], thisPiece.whose));
+                        canMoveNum.push(moveCalculate([-2, 0], thisPiece.whose));
                     }
                 }
                 break;
@@ -596,7 +636,7 @@ const Piece = (props) => {
                 break;
             case 13 :
                 if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), 
+                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
                                     moveCalculate([1, -2], thisPiece.whose), moveCalculate([-1, -2], thisPiece.whose)];
                 }
                 break;
@@ -624,7 +664,7 @@ const Piece = (props) => {
                 }
             }else{
                 //選択解除
-                if(select.num === thisNum){
+                if(!canMove.includes(thisNum)){
                     setClickFlag(!clickFlag);
                     setSelect({num: -1, type: -1, level: 0});
                     // setClick({type: -1, whose: 0, level: 0})
@@ -677,20 +717,22 @@ const Piece = (props) => {
                 //敵駒
                 if (curPieces[thisNum].whose === oppTurn){
                     //取るかつけるか
+                    //王手
                     if(curPieces[thisNum].type === 0) {
                         if(select.level === 3) {
                             curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 2, under: curPieces[thisNum]});
-                            curPieces.splice(select.num, 1, curPieces[select.num]);
+                            curPieces.splice(select.num, 1, curPieces[select.num].under);
                         } else if(select.level === 2) {
                             curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 1});
-                            curPieces.splice(select.num, 1, curPieces[select.num]);
+                            curPieces.splice(select.num, 1, curPieces[select.num].under);
                         } else {
                             curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 1});
                             curPieces.splice(select.num, 1, {type: 0, whose: 0, level: 0});
                         }
-                        
+                        addKifu(curPieces);
                         setWinner(turn);
-                        setPhase(4);
+                        setCurKifu(kifu.length);
+                        setPhase(4)
                     } else if(select.type === 9) {
                         setModal(2);
                         setAttack({num: -1, offense: select.num, defense: thisNum});
@@ -718,7 +760,7 @@ const Piece = (props) => {
                 setSelect({num: -1, type: -1, level: 0});
                 setCanMove([]);
                 setTurn(oppTurn);
-                console.log(bouCheck);
+                // console.log(bouCheck);
             }
         } else if (phase === 1 || phase === 2) {
             if (canMove.includes(thisNum)){
@@ -746,7 +788,7 @@ const Piece = (props) => {
                         setClickFlag(!clickFlag);
                         setPieces(curPieces);
                         setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
-                        // addKifu(curPieces);
+                        addKifu(curPieces);
                         if(phase === 1) {
                             setTurn(oppTurn);
                         } 
@@ -763,7 +805,7 @@ const Piece = (props) => {
                         setClickFlag(!clickFlag);
                         setPieces(curPieces);
                         setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
-                        // addKifu(curPieces);
+                        addKifu(curPieces);
                         setSelect({num: -1, type: -1, level: 0});
                         setCanMove([]);
                         if(phase === 1) {
@@ -810,7 +852,7 @@ const Piece = (props) => {
                     setClickFlag(!clickFlag);
                     setPieces(curPieces);
                     setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}-新`);
-                    // addKifu(curPieces);
+                    addKifu(curPieces);
                     setSelect({num: -1, type: -1, level: 0});
                     setCanMove([]);
                     if(phase === 1) {
@@ -820,11 +862,11 @@ const Piece = (props) => {
             }
             console.log(firstArata);
         }
-            console.log(turn);
+            // console.log(turn);
             console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
     }
     return(
-        <button className={classes.square} onClick={() =>{clickPiece()}}>
+        <button className={squareString} onClick={() =>{clickPiece()}}>
             <div className={classString} style={{ backgroundImage: `url(/images/${thisPieceString}.png)`}}></div>
         </button>
     )
