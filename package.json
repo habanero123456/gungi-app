@@ -21,6 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage":"https://habanero123456.github.io/gungi-app/",
   "eslintConfig": {
     "extends": [
       "react-app",
