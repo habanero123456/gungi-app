@@ -184,7 +184,7 @@ const OwnPiece = (props) => {
 
     return(
         <button className={classes.square} onClick={() =>{clickPiece()}}>
-            <div className={classString} style={{ backgroundImage: `url(/images/${thisPieceString}.png)`}}></div>
+            <div className={classString} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/${thisPieceString}.png)`}}></div>
         </button>
     )
 }

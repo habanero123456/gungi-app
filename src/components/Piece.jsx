@@ -3,6 +3,7 @@ import { PieceContext } from '../App'
 import React, {useState, useContext, useEffect} from 'react'
 import '../assets/styles/style.css'
 import useMedia from 'use-media';
+let pieceImages = [];
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -55,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     },
     canMove: {
         backgroundColor: "#f5a38e",
+    },
+    image: {
+
     },
   }));
 
@@ -867,7 +871,7 @@ const Piece = (props) => {
     }
     return(
         <button className={squareString} onClick={() =>{clickPiece()}}>
-            <div className={classString} style={{ backgroundImage: `url(/images/${thisPieceString}.png)`}}></div>
+            <div className={classString} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/${thisPieceString}.png)`}}></div>
         </button>
     )
 }

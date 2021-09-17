@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/gungi-app/static/css/main.e9dd2c93.chunk.css",
-    "main.js": "/gungi-app/static/js/main.aba775ef.chunk.js",
-    "main.js.map": "/gungi-app/static/js/main.aba775ef.chunk.js.map",
+    "main.js": "/gungi-app/static/js/main.cba958c2.chunk.js",
+    "main.js.map": "/gungi-app/static/js/main.cba958c2.chunk.js.map",
     "runtime-main.js": "/gungi-app/static/js/runtime-main.80e13763.js",
     "runtime-main.js.map": "/gungi-app/static/js/runtime-main.80e13763.js.map",
     "static/js/2.445d4944.chunk.js": "/gungi-app/static/js/2.445d4944.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.80e13763.js",
     "static/js/2.445d4944.chunk.js",
     "static/css/main.e9dd2c93.chunk.css",
-    "static/js/main.aba775ef.chunk.js"
+    "static/js/main.cba958c2.chunk.js"
   ]
 }
