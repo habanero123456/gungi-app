@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
         // height: 460,
     },
     paramsArea: {
+        // display: 'flex',
         height: 200,
         width: 200,
     },
@@ -39,27 +40,30 @@ const useStyles = makeStyles((theme) => ({
     },
 
     containerM: {
-        display: 'flex',
-        margin: "50px auto",
-        flexDirection: 'column',
-        justifyContent: "center",
-        alignItems: "center",
+        // display: 'flex',
+        margin: "100px auto",
+        // flexDirection: 'column',
+        // justifyContent: "center",
+        // alignItems: "center",
         // width: 900,
     },
     gameAreaM: {
-        // display: 'flex',
-        // margin: '0 auto',
-        // paddingTop: '50px',
+        display: 'flex',
+        // margin: "50px auto",
+        flexDirection: 'column',
+        // justifyContent: "center",
+        alignItems: "center",
     },
     ownPieceArea: {
         display: 'flex',
-        justifyContent: "center",
-        alignItems: "center",
+        // justifyContent: "center",
+        // alignItems: "center",
         margin: 20,
     },
     paramsAreaM: {
-        display: 'flex',
-        justifyContent: "center",
+        // display: 'flex',
+        // justifyContent: "center",
+        // padding: 20,
     },
     boardM: {
         marginTop: 1,
@@ -98,12 +102,13 @@ const GameScreen = () => {
                     </div>    
                     <div className={classes.ownPieceArea}>
                         <OwnPieceArea isWhite={true} />
+                        <div className={classes.paramsAreaM}>
+                            <Params />
+                            <Attack />
+                        </div>
                         <OwnPieceArea isWhite={false} />
                     </div>
-                    <div className={classes.paramsAreaM}>
-                        <Attack />
-                        <Params />
-                    </div>
+                    
                 </div>
             </div>
         )

@@ -3,6 +3,7 @@ import { PieceContext } from '../App'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
+import useMedia from 'use-media';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -11,13 +12,21 @@ const useStyles = makeStyles((theme) => ({
     width: 120,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(2, 2, 2),
+    marginTop: 250,
+  },
+  paperM: {
+    position: 'absolute',
+    width: 120,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(1, 2, 1),
+    margin: "-98px 0 0 5px",
     // display: "flex",
     // flexDirection: "column",
-    marginTop: 250,
+    // marginTop: 250,
     // justifyContent: "center",
   },
-  
   content: {
     display: "flex",
     justifyContent: "center",
@@ -35,7 +44,13 @@ const Attack = () => {
     const { modal, setModal } = useContext(PieceContext);
     const { turn, setTurn } = useContext(PieceContext);
     const { attack, setAttack } = useContext(PieceContext);
-    
+    const isWide = useMedia({minWidth: '769px'});
+    let paperString = "";
+    if(isWide) {
+        paperString = `${classes.paper}`
+    } else {
+        paperString = `${classes.paperM}`
+    }
     const clickButton = (number) => {
         setModal(0);
         const newAttack = {num: number, offense: attack.offense, defense: attack.defense}
@@ -44,7 +59,7 @@ const Attack = () => {
 
     if(modal === 1) {
         return (
-            <div id="modal" className={classes.paper}>
+            <div id="modal" className={paperString}>
                 <div id="content" className={classes.content}>
                     <Button 
                         variant="contained" 
@@ -75,7 +90,7 @@ const Attack = () => {
         )
     } else if (modal === 2) {
         return (
-            <div id="modal" className={classes.paper}>
+            <div id="modal" className={paperString}>
                 <div id="content" className={classes.content}>
                     <Button 
                         variant="contained" 
@@ -98,7 +113,7 @@ const Attack = () => {
         )
     } else if (modal === 3) {
         return (
-            <div id="modal" className={classes.paper}>
+            <div id="modal" className={paperString}>
                 <div id="content" className={classes.content}>
                     <Button 
                         variant="contained" 

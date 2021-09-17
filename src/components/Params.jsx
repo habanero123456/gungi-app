@@ -2,25 +2,35 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { PieceContext } from '../App'
 import Button from '@material-ui/core/Button';
+import useMedia from 'use-media';
 
 const useStyles = makeStyles((theme) => ({
     paramsContainer: {
         display: "flex",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        width: 160,
     },
     button1: {
         // margin: 5,
         marginBottom: 10,
         width: 160,
       },
+    button1M: {
+        margin: "0 10px 10px 10px",
+        padding: "6px 10px",
+        // marginBottom: 10,
+        width: 140,
+    },
     bunttonContainer: {
         // display: "flex",
         // justifyContent: "space-between",
     },
     button2: {
-        // margin: 5,
+        marginBottom: 10,
+    },
+    button2M: {
         marginBottom: 10,
     },
   }));
@@ -44,8 +54,19 @@ const Params = (props) => {
     const { bouCheck, setBouCheck } = useContext(PieceContext);
     const { curKifu, setCurKifu } = useContext(PieceContext);
 
-
-    
+    const isWide = useMedia({minWidth: '769px'});
+    let button1String = "";
+    if(isWide) {
+        button1String = `${classes.button1}`;
+    } else {
+        button1String = `${classes.button1M}`;
+    }
+    let button2String = "";
+    if(isWide) {
+        button2String = `${classes.button2}`;
+    } else {
+        button2String = `${classes.button2M}`;
+    }
     const kanji = ['師', '大', '中', '小', '兵', '侍', '忍', '馬', '弓', '砦', '槍', '謀', '砲', '筒'];
 
     let clickString1 = "";
@@ -216,7 +237,7 @@ const Params = (props) => {
                 <Button 
                             variant="contained" 
                             color="primary" 
-                            className={classes.button1}
+                            className={button1String}
                             onClick={() => start()}
                 >
                     始める
@@ -224,7 +245,7 @@ const Params = (props) => {
                 <Button 
                             variant="contained" 
                             color="primary" 
-                            className={classes.button1}
+                            className={button1String}
                             onClick={() => quickStart()}
                 >
                     クイックスタート
@@ -240,7 +261,7 @@ const Params = (props) => {
                 if(bouFlagW === false){
                     sumiBotton = <Button 
                                     variant="contained" 
-                                    className={classes.button1}
+                                    className={button1String}
                                 >
                                     済み
                                 </Button>;
@@ -248,7 +269,7 @@ const Params = (props) => {
                     sumiBotton = <Button 
                                     variant="contained" 
                                     color="primary" 
-                                    className={classes.button1}
+                                    className={button1String}
                                     onClick={() => endPut()}
                                 >
                                     済み
@@ -258,7 +279,7 @@ const Params = (props) => {
                 if(bouFlagB === false){
                     sumiBotton = <Button 
                                     variant="contained" 
-                                    className={classes.button1}
+                                    className={button1String}
                                 >
                                     済み
                                 </Button>;
@@ -266,7 +287,7 @@ const Params = (props) => {
                     sumiBotton = <Button 
                                     variant="contained" 
                                     color="primary" 
-                                    className={classes.button1}
+                                    className={button1String}
                                     onClick={() => endPut()}
                                 >
                                     済み
@@ -278,7 +299,7 @@ const Params = (props) => {
                 if(bouFlagW === false){
                     sumiBotton = <Button 
                                     variant="contained" 
-                                    className={classes.button1}
+                                    className={button1String}
                                 >
                                     済み
                                 </Button>;
@@ -286,7 +307,7 @@ const Params = (props) => {
                     sumiBotton = <Button 
                                     variant="contained" 
                                     color="primary" 
-                                    className={classes.button1}
+                                    className={button1String}
                                     onClick={() => endPut()}
                                 >
                                     済み
@@ -296,7 +317,7 @@ const Params = (props) => {
                 if(bouFlagB === false){
                     sumiBotton = <Button 
                                     variant="contained" 
-                                    className={classes.button1}
+                                    className={button1String}
                                 >
                                     済み
                                 </Button>;
@@ -304,7 +325,7 @@ const Params = (props) => {
                     sumiBotton = <Button 
                                     variant="contained" 
                                     color="primary" 
-                                    className={classes.button1}
+                                    className={button1String}
                                     onClick={() => endPut()}
                                 >
                                     済み
@@ -366,28 +387,28 @@ const Params = (props) => {
         if(curKifu > 0) {
             prevKifuButton = <Button
                                 variant="contained" 
-                                className={classes.button2}
+                                className={button2String}
                                 color="primary" 
                                 onClick={() => displayKifu(true)}
                             >←</Button>
         } else {
             prevKifuButton = <Button
                                 variant="contained" 
-                                className={classes.button2}
+                                className={button2String}
                             >←</Button>
         }
         let nextKifuButton = "";
         if(curKifu < kifu.length - 1) {
             nextKifuButton = <Button
                                 variant="contained" 
-                                className={classes.button2}
+                                className={button2String}
                                 color="primary" 
                                 onClick={() => displayKifu(false)}
                             >→</Button>
         } else {
             nextKifuButton = <Button
                                 variant="contained" 
-                                className={classes.button2}
+                                className={button2String}
                             >→</Button>
         }
         return(
@@ -405,7 +426,7 @@ const Params = (props) => {
                 <Button 
                             variant="contained" 
                             color="primary" 
-                            className={classes.button1}
+                            className={button1String}
                             onClick={() => start()}
                 >
                     再戦
@@ -413,7 +434,7 @@ const Params = (props) => {
                 <Button 
                             variant="contained" 
                             color="primary" 
-                            className={classes.button1}
+                            className={button1String}
                             onClick={() => quickStart()}
                 >
                     クイックスタート

@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     containerM: {
         display: 'flex',
         margin: 0,
-        width: '369px',
+        // width: '369px',
+        width: '351px',
     },
     columnContainerM: {
         flexDirection: 'column',
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     rowContainerM: {
         marginTop: -1,
         marginBottom: 2,
-        height: 40,
+        // height: 40,
+        height: 38,
     },
   }));
 

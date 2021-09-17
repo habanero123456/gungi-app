@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: "border-box",
     },
     squareM: {
-        width: 42,
-        height: 42,
+        width: 40,
+        height: 40,
         borderWidth: 1,
         borderColor: 'black',
         boxSizing: "border-box",
@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
         borderColor: 'black',
         borderWidth: 1,
         // boxSizing: "border-box",
-        width: 40,
-        height: 40,
+        width: 38,
+        height: 38,
     },
     selected: {
         backgroundColor: "#D0D0D0",
