@@ -7,7 +7,7 @@ import useMedia from 'use-media';
 const useStyles = makeStyles((theme) => ({
     paramsContainer: {
         display: "flex",
-        // justifyContent: "center",
+        justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
         width: 160,
@@ -49,8 +49,6 @@ const Params = (props) => {
     const { kifu, setKifu } = useContext(PieceContext);
     const { yomifu, setYomifu } = useContext(PieceContext);
     const { click, setClick } = useContext(PieceContext);
-    const { bouFlagW, setBouFlagW } = useContext(PieceContext);
-    const { bouFlagB, setBouFlagB } = useContext(PieceContext);
     const { bouCheck, setBouCheck } = useContext(PieceContext);
     const { curKifu, setCurKifu } = useContext(PieceContext);
 
@@ -104,6 +102,22 @@ const Params = (props) => {
                 templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 3, under: {type: under1, whose: 2, level: 2, under: {type: under2, whose: 2, level: 1}}});
             } 
         }
+        // culcuTemplateSet(84, 0, 1);
+        // culcuTemplateSet(74, 12, 1);
+        // culcuTemplateSet(64, 6, 1);
+        // culcuTemplateSet(63, 4, 1);
+        // culcuTemplateSet(65, 4, 1);
+        // culcuTemplateSet(62, 7, 1);
+        // culcuTemplateSet(66, 7, 1);
+        // culcuTemplateSet(73, 1, 2, 6);
+        // culcuTemplateSet(75, 2, 2, 13);
+        // culcuTemplateSet(70, 5, 2, 9);
+        // culcuTemplateSet(78, 5, 2, 9);
+        // culcuTemplateSet(61, 3, 2, 4);
+        // culcuTemplateSet(67, 3, 2, 4);
+        // culcuTemplateSet(82, 8, 3, 10, 10);
+        // culcuTemplateSet(86, 8, 3, 10, 11);
+
         culcuTemplateSet(84, 0, 1);
         culcuTemplateSet(74, 12, 1);
         culcuTemplateSet(64, 6, 1);
@@ -111,14 +125,14 @@ const Params = (props) => {
         culcuTemplateSet(65, 4, 1);
         culcuTemplateSet(62, 7, 1);
         culcuTemplateSet(66, 7, 1);
-        culcuTemplateSet(73, 1, 2, 6);
-        culcuTemplateSet(75, 2, 2, 13);
-        culcuTemplateSet(70, 5, 2, 10);
-        culcuTemplateSet(78, 5, 2, 10);
-        culcuTemplateSet(61, 3, 2, 4);
-        culcuTemplateSet(67, 3, 2, 4);
-        culcuTemplateSet(82, 8, 3, 9, 10);
-        culcuTemplateSet(86, 8, 3, 9, 11);
+        culcuTemplateSet(61, 3, 1);
+        culcuTemplateSet(67, 3, 1);
+        culcuTemplateSet(80, 11, 1);
+        culcuTemplateSet(73, 1, 2, 10);
+        culcuTemplateSet(75, 2, 2, 10);
+        culcuTemplateSet(82, 8, 3, 5, 9);
+        culcuTemplateSet(86, 8, 3, 5, 9);
+        
 
         // templateSetSub.splice(44, 1, {type: 13, whose: 1, level: 1});
         // templateSetSub.splice(44, 1, {type: 10, whose: 1, level: 2, under: {type: 1, whose: 1, level: 1}});
@@ -209,8 +223,8 @@ const Params = (props) => {
         setPhase(3);
         setYomifu([]);
         setPieces(templateSet());
-        setWhitePieces([]);
-        setBlackPieces([]);
+        setWhitePieces([4, 4, 6, 11, 13]);
+        setBlackPieces([4, 4, 6, 11, 13]);
         setClickFlag(false);
         setTurn(1);
         setKifu([templateSet()])
@@ -258,79 +272,43 @@ const Params = (props) => {
         let sumiBotton;
         if(phase === 1) {
             if(turn === 2) {
-                if(bouFlagW === false){
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    className={button1String}
-                                >
-                                    済み
-                                </Button>;
-                } else {
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    color="primary" 
-                                    className={button1String}
-                                    onClick={() => endPut()}
-                                >
-                                    済み
-                                </Button>
-                }
+                sumiBotton = <Button 
+                                variant="contained" 
+                                color="primary" 
+                                className={button1String}
+                                onClick={() => endPut()}
+                            >
+                                済み
+                            </Button>
             } else {
-                if(bouFlagB === false){
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    className={button1String}
-                                >
-                                    済み
-                                </Button>;
-                } else {
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    color="primary" 
-                                    className={button1String}
-                                    onClick={() => endPut()}
-                                >
-                                    済み
-                                </Button>
-                }
+                sumiBotton = <Button 
+                                variant="contained" 
+                                color="primary" 
+                                className={button1String}
+                                onClick={() => endPut()}
+                            >
+                                済み
+                            </Button>
             }
         } else {
             if(turn === 1) {
-                if(bouFlagW === false){
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    className={button1String}
-                                >
-                                    済み
-                                </Button>;
-                } else {
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    color="primary" 
-                                    className={button1String}
-                                    onClick={() => endPut()}
-                                >
-                                    済み
-                                </Button>
-                }
+                sumiBotton = <Button 
+                                variant="contained" 
+                                color="primary" 
+                                className={button1String}
+                                onClick={() => endPut()}
+                            >
+                                済み
+                            </Button>
             } else {
-                if(bouFlagB === false){
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    className={button1String}
-                                >
-                                    済み
-                                </Button>;
-                } else {
-                    sumiBotton = <Button 
-                                    variant="contained" 
-                                    color="primary" 
-                                    className={button1String}
-                                    onClick={() => endPut()}
-                                >
-                                    済み
-                                </Button>
-                }
+                sumiBotton = <Button 
+                                variant="contained" 
+                                color="primary" 
+                                className={button1String}
+                                onClick={() => endPut()}
+                            >
+                                済み
+                            </Button>
             }
         }
         return(

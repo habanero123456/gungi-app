@@ -37,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
   button1: {
     margin: 5,
   },
+  ruleBookContainer: {
+    width: 458,
+    height: 458,
+    backgroundColor: "#cccccc",
+    position: "absolute",
+    // marginLeft: 130,
+    // marginTop: 130,
+  },
 }));
 
 const Attack = () => {
@@ -139,4 +147,17 @@ const Attack = () => {
     }
 }
 
-export { Attack }
+const RuleBook = () => {
+    const classes = useStyles();
+    const { ruleBook, setRuleBook } = useContext(PieceContext);
+    if(ruleBook) {
+        return (
+            <div className={classes.ruleBookContainer}>
+
+            </div>
+        )
+    } else {
+        return null
+    }
+}
+export { Attack, RuleBook}

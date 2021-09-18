@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/gungi-app/static/css/main.e9dd2c93.chunk.css",
-    "main.js": "/gungi-app/static/js/main.bf8b4fa9.chunk.js",
-    "main.js.map": "/gungi-app/static/js/main.bf8b4fa9.chunk.js.map",
+    "main.js": "/gungi-app/static/js/main.29dc4c82.chunk.js",
+    "main.js.map": "/gungi-app/static/js/main.29dc4c82.chunk.js.map",
     "runtime-main.js": "/gungi-app/static/js/runtime-main.80e13763.js",
     "runtime-main.js.map": "/gungi-app/static/js/runtime-main.80e13763.js.map",
-    "static/js/2.2cafeffe.chunk.js": "/gungi-app/static/js/2.2cafeffe.chunk.js",
-    "static/js/2.2cafeffe.chunk.js.map": "/gungi-app/static/js/2.2cafeffe.chunk.js.map",
+    "static/js/2.6f2bbc07.chunk.js": "/gungi-app/static/js/2.6f2bbc07.chunk.js",
+    "static/js/2.6f2bbc07.chunk.js.map": "/gungi-app/static/js/2.6f2bbc07.chunk.js.map",
     "static/js/3.ecdd7577.chunk.js": "/gungi-app/static/js/3.ecdd7577.chunk.js",
     "static/js/3.ecdd7577.chunk.js.map": "/gungi-app/static/js/3.ecdd7577.chunk.js.map",
     "index.html": "/gungi-app/index.html",
     "static/css/main.e9dd2c93.chunk.css.map": "/gungi-app/static/css/main.e9dd2c93.chunk.css.map",
-    "static/js/2.2cafeffe.chunk.js.LICENSE.txt": "/gungi-app/static/js/2.2cafeffe.chunk.js.LICENSE.txt"
+    "static/js/2.6f2bbc07.chunk.js.LICENSE.txt": "/gungi-app/static/js/2.6f2bbc07.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.80e13763.js",
-    "static/js/2.2cafeffe.chunk.js",
+    "static/js/2.6f2bbc07.chunk.js",
     "static/css/main.e9dd2c93.chunk.css",
-    "static/js/main.bf8b4fa9.chunk.js"
+    "static/js/main.29dc4c82.chunk.js"
   ]
 }

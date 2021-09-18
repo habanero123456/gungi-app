@@ -3,7 +3,6 @@ import { PieceContext } from '../App'
 import React, {useState, useContext, useEffect} from 'react'
 import '../assets/styles/style.css'
 import useMedia from 'use-media';
-let pieceImages = [];
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -79,8 +78,6 @@ const Piece = (props) => {
     const { yomifu, setYomifu } = useContext(PieceContext);
     const { click, setClick } = useContext(PieceContext);
     const { firstArata, setFirstArata } = useContext(PieceContext);
-    const { bouFlagW, setBouFlagW } = useContext(PieceContext);
-    const { bouFlagB, setBouFlagB } = useContext(PieceContext);
     const { bouCheck, setBouCheck } = useContext(PieceContext);
     const { curKifu, setCurKifu } = useContext(PieceContext);
     
@@ -133,19 +130,49 @@ const Piece = (props) => {
     }
 
     const checkBou = () => {
-        const curWPiece = curPieces.filter((piece) => {
-            return piece.whose === 1;
-        })
-        const curBPiece = curPieces.filter((piece) => {
-            return piece.whose === 2;
-        })
-        const checkBouW = curWPiece.some((piece) => {
-            return piece.type === 11;
-        })
-        const checkBouB = curBPiece.some((piece) => {
-            return piece.type === 11;
-        })
-        setBouCheck([checkBouW, checkBouB]);
+        // const curWPiece = curPieces.filter((piece) => {
+        //     return piece.whose === 1;
+        // })
+        // const curBPiece = curPieces.filter((piece) => {
+        //     return piece.whose === 2;
+        // })
+        // const checkBouW = curWPiece.some((piece) => {
+        //     return piece.type === 11;
+        // })
+        let WFleg = false;
+        let BFleg = false;
+        const checkBou = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
+            let Wy = -1;
+            let By = -1;
+            if(!WFleg) {
+                if(currentValue.whose === 1) {
+                    if(currentValue.type === 11) {
+                        console.log(pieceIndex);
+                        Wy = (pieceIndex - (pieceIndex % 10)) / 10;
+                        WFleg = true;
+                        accumulator[0] = Wy;
+                    } 
+                }
+                if(pieceIndex === prevArray.length - 1) {
+                    accumulator.push(Wy);
+                }
+            }
+            if(!BFleg) {
+                if(currentValue.whose === 2) {
+                    if(currentValue.type === 11) {
+                        console.log(pieceIndex);
+                        By = (pieceIndex - (pieceIndex % 10)) / 10;
+                        BFleg = true;
+                        accumulator[1] = By;
+                    }
+                }
+                if(pieceIndex === prevArray.length - 1) {
+                    accumulator.push(By);
+                }
+            }
+            return accumulator;
+        }, [])
+        setBouCheck(checkBou);
     }
 
     //攻撃
@@ -395,9 +422,22 @@ const Piece = (props) => {
                           }
                     }
                 } else {
-                    if(thisPiece.level >= item.level) {
-                        return true;
-                      }
+                    if(thisPiece.whose !== 3) {
+                        if(thisPiece.level >= item.level) {
+                            return true;
+                          }
+                    } else {
+                        if(thisPiece.whose !== item.whose) {
+                            if(thisPiece.level >= item.level) {
+                                return true;
+                              }
+                        } else {
+                            if(thisPiece.level > item.level) {
+                                return true;
+                              }
+                        }
+                    }
+                    
                 }
             }).map((piece) => {
                 return piece.index;
@@ -533,9 +573,9 @@ const Piece = (props) => {
                 break;
             case 5 :
                 if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose)];
                 } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
+                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose)];
                     if(isPiece(canMoveNum[0])) {
                         canMoveNum.push(moveCalculate([2, 2], thisPiece.whose));
                     }
@@ -796,9 +836,6 @@ const Piece = (props) => {
                         if(phase === 1) {
                             setTurn(oppTurn);
                         } 
-                        if(select.type === 11) {
-                            setBouFlagW(true);
-                        }
                     }else if(select.num === 91) {
                         let newBlackPieces = Array.from(blackPieces);
                         const arataIndex = newBlackPieces.indexOf(select.type);
@@ -815,9 +852,6 @@ const Piece = (props) => {
                         if(phase === 1) {
                             setTurn(oppTurn);
                         } 
-                        if(select.type === 11) {
-                            setBouFlagB(true);
-                        }
                     }
                 } else if (curPieces[thisNum].whose === turn){
                     if(select.num === 90){

@@ -120,17 +120,59 @@ const OwnPiece = (props) => {
         return checkCanMove;
     }
 
-    const searchCanMove = () => {
+    const searchCanMove1 = () => {
         let curCanMove = [];
         if(whoseNum === 1) {
-            for (let i = 6; i < 9; i++) {
+            if(thisType === 11) {
+                for (let i = 0; i < 9; i++) {
+                    curCanMove.push({...curPieces[80 + i], index: 80 + i});
+                }
+            } else {
+                for (let i = 6; i < 9; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
+                    }
+                }
+            }
+        }
+        if(whoseNum === 2) {
+            if(thisType === 11) {
+                for (let i = 0; i < 9; i++) {
+                    curCanMove.push({...curPieces[i], index: i});
+                }
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
+                    }
+                }
+            }
+        }
+
+        const checkedAratable = checkAratable(curCanMove);
+
+        setCanMove(checkedAratable);
+    }
+    
+    const searchCanMove2 = () => {
+        let curCanMove = [];
+        let WArea = 6;
+        if(bouCheck[0] < 6 && bouCheck[0] > 0) {
+            WArea = bouCheck[0]
+        }
+        if(whoseNum === 1) {
+            for (let i = WArea; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
                     curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
                 }
             }
         }
+        let BArea = 3;
+        if(bouCheck[1] >= 3) {
+            BArea = bouCheck[1] + 1
+        }
         if(whoseNum === 2) {
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < BArea; i++) {
                 for (let j = 0; j < 9; j++) {
                     curCanMove.push({...curPieces[10 * i + j], index: 10 * i + j});
                 }
@@ -141,10 +183,6 @@ const OwnPiece = (props) => {
 
         setCanMove(checkedAratable);
     }
-    
-    if(bouCheck[turn - 1] === true) {
-
-    }
 
     const clickPiece = () => {
         if(phase === 1 || phase === 2) {
@@ -152,7 +190,7 @@ const OwnPiece = (props) => {
                 if (whoseNum === turn){
                     setClickFlag(!clickFlag);
                     setSelect({num: whoseNum + 89, type: thisType, level: 1});
-                    searchCanMove();
+                    searchCanMove1();
                 }
             }else{
                 //選択解除
@@ -163,12 +201,12 @@ const OwnPiece = (props) => {
                 }
             }
         } else if(phase === 3) {
-            if(bouCheck[turn - 1] === true) {
+            console.log(bouCheck);
                 if (clickFlag === false) {
                     if (whoseNum === turn){
                         setClickFlag(!clickFlag);
                         setSelect({num: whoseNum + 89, type: thisType, level: 1});
-                        searchCanMove();
+                        searchCanMove2();
                     }
                 }else{
                     //選択解除
@@ -178,7 +216,6 @@ const OwnPiece = (props) => {
                         setCanMove([]);
                     }
                 }
-            }
         }
     }
 
