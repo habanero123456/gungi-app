@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { PieceContext } from '../App'
 import React, {useState, useContext, useEffect} from 'react'
 import '../assets/styles/style.css'
@@ -668,9 +668,7 @@ const Piece = (props) => {
                 }
                 break;
             case 11 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
-                }
+                canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
                 break;
             case 12 :
                 if(thisPiece.level === 1) {

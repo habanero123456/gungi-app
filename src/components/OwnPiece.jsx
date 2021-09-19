@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { PieceContext } from '../App'
 
 const useStyles = makeStyles((theme) => ({

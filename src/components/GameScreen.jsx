@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { PieceContext } from '../App'
 import { Board, OwnPieceArea, Params } from "./index.js"
 import { Attack, RuleBook } from './modals.jsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import useMedia from 'use-media';
 import Button from '@material-ui/core/Button';
 
@@ -21,6 +21,15 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-around",
         height: 50,
         width: 360
+    },
+    topBarM: {
+        display: 'flex',
+        margin: '10px auto',
+        // flexDirection: 'column',
+        alignItems: "space-around",
+        justifyContent: "space-around",
+        // height: 50,
+        width: 360,
     },
     
     gameArea: {
@@ -58,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     },
     containerM: {
         // display: 'flex',
-        margin: "100px auto",
+        margin: "0 auto",
         // flexDirection: 'column',
         // justifyContent: "center",
         // alignItems: "center",
@@ -132,7 +141,9 @@ const GameScreen = () => {
                         <Attack />
                     </div>
                     <div className={classes.board}>
-                        <RuleBook />
+                        {/* <div className={classes.ruleContainer}> */}
+                            <RuleBook />
+                        {/* </div> */}
                         <Board />
                     </div>
                     <div className={classes.rightParamsArea}>
@@ -147,8 +158,27 @@ const GameScreen = () => {
     } else {
         return(
             <div className={classes.containerM}>
+                <div className={classes.topBarM}>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        className={classes.button1}
+                        onClick={() => clickRestart()}
+                    >
+                        はじめから
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        className={classes.button1}
+                        onClick={() => clickRule()}
+                    >
+                        ルール
+                    </Button>
+                </div>
                 <div className={classes.gameAreaM}>
                     <div className={classes.boardM}>
+                        <RuleBook />
                         <Board />
                     </div>    
                     <div className={classes.ownPieceArea}>

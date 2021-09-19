@@ -1,6 +1,6 @@
 import React from 'react';
 import { Piece } from "./index.js"
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import useMedia from 'use-media';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { PieceContext } from '../App'
 import Button from '@material-ui/core/Button';
 import useMedia from 'use-media';
@@ -223,8 +223,8 @@ const Params = (props) => {
         setPhase(3);
         setYomifu([]);
         setPieces(templateSet());
-        setWhitePieces([4, 4, 6, 11, 13]);
-        setBlackPieces([4, 4, 6, 11, 13]);
+        setWhitePieces([4, 4, 6, 10, 13]);
+        setBlackPieces([4, 4, 6, 10, 13]);
         setClickFlag(false);
         setTurn(1);
         setKifu([templateSet()])
