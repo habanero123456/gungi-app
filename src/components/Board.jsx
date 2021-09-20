@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     containerM: {
         display: 'flex',
         margin: 0,
-        // width: '369px',
         width: '351px',
     },
     columnContainerM: {
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     rowContainerM: {
         marginTop: -1,
         marginBottom: 2,
-        // height: 40,
         height: 38,
     },
   }));
@@ -49,7 +47,6 @@ const Board = () => {
     if(isWide){
         return(
             <div className={classes.container}>
-                {/* <div className={classes.status}>{status}</div> */}
                 <div className={classes.columnContainer}>
                      {nineCount.map((columnInt) =>{
                         return(
@@ -66,7 +63,6 @@ const Board = () => {
     } else {
         return(
             <div className={classes.containerM}>
-                {/* <div className={classes.status}>{status}</div> */}
                 <div className={classes.columnContainerM}>
                      {nineCount.map((columnInt) =>{
                         return(
@@ -81,7 +77,6 @@ const Board = () => {
             </div>
         )
     }
-    
 }
 
 export default Board;

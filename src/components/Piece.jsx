@@ -130,15 +130,6 @@ const Piece = (props) => {
     }
 
     const checkBou = () => {
-        // const curWPiece = curPieces.filter((piece) => {
-        //     return piece.whose === 1;
-        // })
-        // const curBPiece = curPieces.filter((piece) => {
-        //     return piece.whose === 2;
-        // })
-        // const checkBouW = curWPiece.some((piece) => {
-        //     return piece.type === 11;
-        // })
         let WFleg = false;
         let BFleg = false;
         const checkBou = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
@@ -227,7 +218,6 @@ const Piece = (props) => {
                     curPieces.splice(attack.offense, 1, {type: 0, whose: 0, level: 0});
                 }
                 addKifu(curPieces);
-                // setYomifu(`${x}-${y}-${thisPiece.level}-${kanji[thisPiece.type]}`);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
                 setClickFlag(!clickFlag);
                 checkBou();
@@ -331,11 +321,6 @@ const Piece = (props) => {
     }
     const thisUnderColor = UnderColorCheck();
     const thisPieceString = `piece${thisPiece.type}-${thisPiece.whose}-${thisUnderColor}`;
-    // let provisionalPiece = "";
-    // if(thisPiece.whose !== 0) {
-    //     provisionalPiece = `piece0-${thisPiece.whose}-3`;
-    //     // provisionalPiece = "testPiece";
-    // }
 
     const searchCanMove = () => {
 
@@ -354,7 +339,6 @@ const Piece = (props) => {
                 }
             }
         }
-        // const checkCheckMate
 
         const isIncludeKing = (array) => {
             const checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
@@ -372,7 +356,6 @@ const Piece = (props) => {
                 } else {
                     return true;
                 }
-                // return item.type !== 0 && item.whose === turn;
             }).map((piece) => {
                 return piece.index;
             })
@@ -421,18 +404,20 @@ const Piece = (props) => {
                             return true;
                           }
                     }
+                //通常駒
                 } else {
-                    if(thisPiece.whose !== 3) {
+                    if(thisPiece.level !== 3) {
                         if(thisPiece.level >= item.level) {
                             return true;
                           }
+                    //レベル３の時
                     } else {
                         if(thisPiece.whose !== item.whose) {
                             if(thisPiece.level >= item.level) {
                                 return true;
                               }
                         } else {
-                            if(thisPiece.level > item.level) {
+                            if(item.level !== 3) {
                                 return true;
                               }
                         }
@@ -542,9 +527,6 @@ const Piece = (props) => {
                     canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
                                     moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
                 } else if(thisPiece.level >= 2) {
-                    // canMoveNum = [moveCalculate([1, 0], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                    //                 moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([0, -2], thisPiece.whose), moveCalculate([0, 2], thisPiece.whose), 
-                    //                 moveCalculate([2, 0], thisPiece.whose), moveCalculate([-2, 0], thisPiece.whose)];
                     canMoveNum = [moveCalculate([1, 0], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
                                     moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
                     if(isPiece(canMoveNum[0])) {
@@ -686,10 +668,6 @@ const Piece = (props) => {
         const checkedCanMove = isIncludeKing(canMoveNum);
         const checkedRideable = checkRideable(checkedCanMove);
         const checkedLevel = checkLevel(checkedRideable);
-
-        // console.log(checkedRideable);
-        // console.log(checkedLevel);
-        
         setCanMove(checkedLevel);
     }
 
@@ -701,7 +679,6 @@ const Piece = (props) => {
                 if (thisPiece.whose === turn){
                     setClickFlag(!thisClickFlag);
                     setSelect({num: thisNum, type: curPieces[thisNum].type, level: curPieces[thisNum].level});
-                    // setClick(curPieces[thisNum]);
                     searchCanMove();
                 }
             }else{
@@ -709,7 +686,6 @@ const Piece = (props) => {
                 if(!canMove.includes(thisNum)){
                     setClickFlag(!clickFlag);
                     setSelect({num: -1, type: -1, level: 0});
-                    // setClick({type: -1, whose: 0, level: 0})
                     setCanMove([]);
                 }
             }
@@ -798,11 +774,9 @@ const Piece = (props) => {
                     }
                 }
                 setPieces(curPieces);
-                // setClickFlag(!clickFlag);
                 setSelect({num: -1, type: -1, level: 0});
                 setCanMove([]);
                 setTurn(oppTurn);
-                // console.log(bouCheck);
             }
         } else if (phase === 1 || phase === 2) {
             if (canMove.includes(thisNum)){
@@ -898,7 +872,6 @@ const Piece = (props) => {
             }
             console.log(firstArata);
         }
-            // console.log(turn);
             console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
     }
     return(

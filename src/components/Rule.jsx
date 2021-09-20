@@ -3,7 +3,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles } from '@mui/styles';
 import useMedia from 'use-media';
 
@@ -24,16 +23,12 @@ const useStyles = makeStyles((theme) => ({
 	    justifyContent: "unset",
     },
     images: {
-        // minWidth: "30%",
         height: 250,
         minWidth: 250,
         backgroundSize: "contain",
     },
     contents: {
-        // overflowY: "scroll",
     },
-    // accoContainer: {
-    // },
   }));
 const Rule = () => {
     const classes = useStyles();
@@ -48,7 +43,6 @@ const Rule = () => {
         <div className={containerString}>
             <Accordion>
                 <AccordionSummary
-                    // expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
@@ -111,7 +105,6 @@ const Rule = () => {
             </Accordion>
             <Accordion className={classes.accoContainer}>
                 <AccordionSummary
-                    // expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
@@ -153,7 +146,6 @@ const Rule = () => {
             </Accordion>
             <Accordion>
                 <AccordionSummary
-                    // expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
@@ -161,7 +153,7 @@ const Rule = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>
-                    帥(スイ）砲（オオヅツ）筒（ツツ）
+                    帥(スイ）
                     <br />
                     ツケることもツケられることもできないが二弾三段の敵コマを下段ごと取ることができる
                     <br />

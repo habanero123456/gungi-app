@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { PieceContext } from '../App'
 import { makeStyles } from '@mui/styles';
 import Button from '@material-ui/core/Button';
-import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import { Rule } from "./index.js"
 import useMedia from 'use-media';
 
@@ -19,22 +18,13 @@ const useStyles = makeStyles((theme) => ({
   paperM: {
     position: 'absolute',
     width: 120,
-    // backgroundColor: theme.palette.background.paper,
-    // boxShadow: theme.shadows[5],
-    // padding: theme.spacing(1, 2, 1),
     margin: "0 0 0 20px",
-    // margin: "-98px 0 0 5px",
-    // display: "flex",
-    // flexDirection: "column",
-    // marginTop: 250,
-    // justifyContent: "center",
   },
   content: {
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",
     width: 120,
-    // margin: 5,
   },
   button1: {
     margin: 5,
@@ -54,8 +44,6 @@ const useStyles = makeStyles((theme) => ({
     height: 458,
     backgroundColor: "#cccccc",
     position: "absolute",
-    // marginLeft: 130,
-    // marginTop: 130,
   },
   ruleBookContainerM: {
     margin: -2,
@@ -63,15 +51,12 @@ const useStyles = makeStyles((theme) => ({
     height: 354,
     backgroundColor: "#cccccc",
     position: "absolute",
-    // marginLeft: 130,
-    // marginTop: 130,
   },
 }));
 
 const Attack = () => {
     const classes = useStyles();
     const { modal, setModal } = useContext(PieceContext);
-    const { turn, setTurn } = useContext(PieceContext);
     const { attack, setAttack } = useContext(PieceContext);
     const isWide = useMedia({minWidth: '769px'});
     let paperString = "";
@@ -108,12 +93,10 @@ const Attack = () => {
                     </Button>
                     <Button 
                         variant="contained" 
-                        // color="#cccccc" 
                         className={classes.button1}
                         onClick={() => clickButton(1)}
                     >
                         キャンセル
-                        {/* <ClearRoundedIcon /> */}
                     </Button>
                 </div>
             </div >
@@ -136,7 +119,6 @@ const Attack = () => {
                         onClick={() => clickButton(1)}
                     >
                         キャンセル
-                        {/* <ClearRoundedIcon /> */}
                     </Button>
                 </div>
             </div >
@@ -159,7 +141,6 @@ const Attack = () => {
                         onClick={() => clickButton(1)}
                     >
                         キャンセル
-                        {/* <ClearRoundedIcon /> */}
                     </Button>
                 </div>
             </div >
@@ -188,7 +169,6 @@ const RuleBook = () => {
                 <div className={classes.closeContainer}>
                     <Button 
                         variant="contained" 
-                        // color="secondary" 
                         className={classes.button2}
                         onClick={() => clickRule()}
                     >

@@ -13,19 +13,15 @@ const useStyles = makeStyles((theme) => ({
         width: 160,
     },
     button1: {
-        // margin: 5,
         marginBottom: 10,
         width: 160,
       },
     button1M: {
         margin: "0 10px 10px 10px",
         padding: "6px 10px",
-        // marginBottom: 10,
         width: 140,
     },
     bunttonContainer: {
-        // display: "flex",
-        // justifyContent: "space-between",
     },
     button2: {
         marginBottom: 10,
@@ -102,21 +98,6 @@ const Params = (props) => {
                 templateSetSub.splice(oppNum, 1, {type: type, whose: 2, level: 3, under: {type: under1, whose: 2, level: 2, under: {type: under2, whose: 2, level: 1}}});
             } 
         }
-        // culcuTemplateSet(84, 0, 1);
-        // culcuTemplateSet(74, 12, 1);
-        // culcuTemplateSet(64, 6, 1);
-        // culcuTemplateSet(63, 4, 1);
-        // culcuTemplateSet(65, 4, 1);
-        // culcuTemplateSet(62, 7, 1);
-        // culcuTemplateSet(66, 7, 1);
-        // culcuTemplateSet(73, 1, 2, 6);
-        // culcuTemplateSet(75, 2, 2, 13);
-        // culcuTemplateSet(70, 5, 2, 9);
-        // culcuTemplateSet(78, 5, 2, 9);
-        // culcuTemplateSet(61, 3, 2, 4);
-        // culcuTemplateSet(67, 3, 2, 4);
-        // culcuTemplateSet(82, 8, 3, 10, 10);
-        // culcuTemplateSet(86, 8, 3, 10, 11);
 
         culcuTemplateSet(84, 0, 1);
         culcuTemplateSet(74, 12, 1);
@@ -323,7 +304,6 @@ const Params = (props) => {
             </div>
         )
     } else if (phase === 3) {
-        // const numString = `${kifu.length + 1}`;
         const numString = `${kifu.length }`;
         let turnString = "";
         if(turn === 1) {

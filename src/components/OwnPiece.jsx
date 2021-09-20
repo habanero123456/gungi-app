@@ -4,28 +4,19 @@ import { PieceContext } from '../App'
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        // display: 'flex',
         margin: 0,
         width: '50px',
-        // flexWrap: 'wrap',
-        // flexDirection: 'column',
     },
     square: {
         width: 30,
         height: 30,
         borderWidth: 0,
-        // borderColor: 'black',
-        // boxSizing: "border-box",
-        // margin: -1,
-        // flexDirection: 'column',
         backgroundColor: "#F8BE75",
     },
     piece: {
         backgroundSize: "contain",
         borderWidth: 0,
-        // boxSizing: "border-box",
         width: 30,
-        // margin: -1,
         height: 30,
     },
     selected: {
@@ -42,16 +33,12 @@ const OwnPiece = (props) => {
     const { select, setSelect } = useContext(PieceContext);
     const { clickFlag, setClickFlag } = useContext(PieceContext);
     const { canMove, setCanMove } = useContext(PieceContext);
-    const { modal, setModal } = useContext(PieceContext);
-    const { attack, setAttack } = useContext(PieceContext);
     const { phase, setPhase } = useContext(PieceContext);
     const { click, setlick } = useContext(PieceContext);
     const { bouCheck, setBouCheck } = useContext(PieceContext);
    
     const thisType = props.index;
     
-    // const thisPieceString = "4-1-0";
-
     let whoseNum;
     if(props.isWhite) {
         whoseNum = 1;

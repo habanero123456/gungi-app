@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { PieceContext } from '../App'
+import { PieceContext, ThemeContext} from '../App'
 import { Board, OwnPieceArea, Params } from "./index.js"
 import { Attack, RuleBook } from './modals.jsx';
 import { makeStyles } from '@mui/styles';
@@ -62,34 +62,21 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 1,
     },
     button1: {
-        // marginBottom: 10,
         width: 120,
     },
     containerM: {
-        // display: 'flex',
         margin: "0 auto",
-        // flexDirection: 'column',
-        // justifyContent: "center",
-        // alignItems: "center",
-        // width: 900,
     },
     gameAreaM: {
         display: 'flex',
-        // margin: "50px auto",
         flexDirection: 'column',
-        // justifyContent: "center",
         alignItems: "center",
     },
     ownPieceArea: {
         display: 'flex',
-        // justifyContent: "center",
-        // alignItems: "center",
         margin: 20,
     },
     paramsAreaM: {
-        // display: 'flex',
-        // justifyContent: "center",
-        // padding: 20,
     },
     boardM: {
         marginTop: 1,
@@ -102,17 +89,25 @@ const GameScreen = () => {
     const { ruleBook, setRuleBook } = useContext(PieceContext);
     const { phase, setPhase } = useContext(PieceContext);
     const { pieces, setPieces } = useContext(PieceContext);
-    // const { kifu, setKifu } = useContext(PieceContext);
+    const { canMove, setCanMove } = useContext(PieceContext);
+    const { select, setSelect } = useContext(PieceContext);
+    const { clickFlag, setClickFlag } = useContext(PieceContext);
+    const { modal, setModal } = useContext(PieceContext);
+    const theme = useContext(ThemeContext);
 
     const clickRule = () => {
         setRuleBook(!ruleBook)
+        console.log(theme);
     }
 
     const initPieces = new Array(89).fill({type: -1, whose: 0, level: 0});
     const clickRestart = () => {
         setPhase(0);
+        setCanMove([])
+        setSelect({num: -1, type: -1, level: 0})
+        setClickFlag(false);
         setPieces(initPieces);
-        // setKifu([])
+        setModal(0);
     }
     if(isWide) {
         return(
@@ -121,6 +116,7 @@ const GameScreen = () => {
                     <Button 
                         variant="contained" 
                         color="primary" 
+                        // color={theme.palette.primary} 
                         className={classes.button1}
                         onClick={() => clickRestart()}
                     >
@@ -141,9 +137,7 @@ const GameScreen = () => {
                         <Attack />
                     </div>
                     <div className={classes.board}>
-                        {/* <div className={classes.ruleContainer}> */}
                             <RuleBook />
-                        {/* </div> */}
                         <Board />
                     </div>
                     <div className={classes.rightParamsArea}>

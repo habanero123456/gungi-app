@@ -43,9 +43,6 @@ const OwnPieceArea = (props) => {
                                 <OwnPiece isWhite={props.isWhite} index={index}/>
                             )
                         })}
-                        {/* {for(let i = 0; i < 14; i++){
-
-                        }} */}
                     </div>
                     : <div className={classes.squareContainerSub}>
                         {blackTypes.map((index)=>{
