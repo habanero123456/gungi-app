@@ -134,8 +134,8 @@ const Params = (props) => {
         culcuTemplateSet(86, 8, 3, 5, 9);
         
 
-        // templateSetSub.splice(44, 1, {type: 13, whose: 1, level: 1});
-        // templateSetSub.splice(44, 1, {type: 10, whose: 1, level: 2, under: {type: 1, whose: 1, level: 1}});
+        // templateSetSub.splice(44, 1, {type: 5, whose: 1, level: 1});
+        // templateSetSub.splice(44, 1, {type: 5, whose: 1, level: 2, under: {type: 1, whose: 1, level: 1}});
         return templateSetSub;
     }
     const checkBou = () => {

@@ -98,13 +98,13 @@ const Rule = () => {
                             <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move10-1.png)`}}></div>
                         </div>
                         <div className={classes.type}>
-                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move08-2.png)`}}></div>
+                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move11-1.png)`}}></div>
                         </div>
                         <div className={classes.type}>
-                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move08-2.png)`}}></div>
+                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move12-1.png)`}}></div>
                         </div>
                         <div className={classes.type}>
-                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move08-2.png)`}}></div>
+                            <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move13-1.png)`}}></div>
                         </div>
                     </Typography>
                 </AccordionDetails>
@@ -164,6 +164,11 @@ const Rule = () => {
                     帥(スイ）砲（オオヅツ）筒（ツツ）
                     <br />
                     ツケることもツケられることもできないが二弾三段の敵コマを下段ごと取ることができる
+                    <br />
+                    <br />
+                    帥(スイ）砲（オオヅツ）筒（ツツ）
+                    <br />
+                    ツケることができないが二弾三段の敵コマを下段ごと取ることができる
                     <br />
                     <br />
                     砦(トリデ)
