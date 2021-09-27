@@ -167,7 +167,8 @@ const OwnPiece = (props) => {
         }
 
         const checkedAratable = checkAratable(curCanMove);
-
+        console.log(curCanMove);
+        console.log(checkedAratable);
         setCanMove(checkedAratable);
     }
 

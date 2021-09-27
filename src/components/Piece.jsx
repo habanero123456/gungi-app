@@ -215,7 +215,7 @@ const Piece = (props) => {
                 //レベル１のとき
                 } else {
                     curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level});
-                    curPieces.splice(attack.offense, 1, {type: 0, whose: 0, level: 0});
+                    curPieces.splice(attack.offense, 1, {type: -1, whose: 0, level: 0});
                 }
                 addKifu(curPieces);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
@@ -745,7 +745,7 @@ const Piece = (props) => {
                             curPieces.splice(select.num, 1, curPieces[select.num].under);
                         } else {
                             curPieces.splice(thisNum, 1, {type: select.type, whose: turn, level: 1});
-                            curPieces.splice(select.num, 1, {type: 0, whose: 0, level: 0});
+                            curPieces.splice(select.num, 1, {type: -1, whose: 0, level: 0});
                         }
                         addKifu(curPieces);
                         setWinner(turn);
