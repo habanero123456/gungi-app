@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 1,
     },
     button1: {
-        width: 120,
+        width: 115,
     },
     containerM: {
         margin: "0 auto",
@@ -93,6 +93,8 @@ const GameScreen = () => {
     const { select, setSelect } = useContext(PieceContext);
     const { clickFlag, setClickFlag } = useContext(PieceContext);
     const { modal, setModal } = useContext(PieceContext);
+    const { kifu, setKifu } = useContext(PieceContext);
+    const { turn, setTurn } = useContext(PieceContext);
     const theme = useContext(ThemeContext);
 
     const clickRule = () => {
@@ -109,86 +111,200 @@ const GameScreen = () => {
         setPieces(initPieces);
         setModal(0);
     }
-    if(isWide) {
-        return(
-            <div className={classes.container}>
-                <div className={classes.topBar}>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        // color={theme.palette.primary} 
-                        className={classes.button1}
-                        onClick={() => clickRestart()}
-                    >
-                        はじめから
-                    </Button>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        className={classes.button1}
-                        onClick={() => clickRule()}
-                    >
-                        ルール
-                    </Button>
-                </div>
-                <div className={classes.gameArea}>
-                    <div className={classes.leftParamsArea}>
-                        <OwnPieceArea isWhite={false} />
-                        <Attack />
+    const toggleWhose = (whose) => {
+        if (whose === 1) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+    const oppTurn = toggleWhose(turn);
+
+    const setPrevPiece = () => {
+        console.log(kifu);
+        const prevKifu = Array.from(kifu);
+        prevKifu.pop();
+        setKifu(prevKifu);
+        setTurn(oppTurn);
+        setPieces(kifu[kifu.length - 2]);
+    }
+    if(phase === 3) {
+        if(isWide) {
+            return(
+                <div className={classes.container}>
+                    <div className={classes.topBar}>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            // color={theme.palette.primary} 
+                            className={classes.button1}
+                            onClick={() => clickRestart()}
+                        >
+                            はじめから
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => setPrevPiece()}
+                        >
+                            一手戻る
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRule()}
+                        >
+                            ルール
+                        </Button>
                     </div>
-                    <div className={classes.board}>
-                            <RuleBook />
-                        <Board />
-                    </div>
-                    <div className={classes.rightParamsArea}>
-                        <div className={classes.paramsArea}>
-                            <Params />
-                        </div>
-                        <OwnPieceArea isWhite={true} />
-                    </div>
-                </div>
-            </div>
-        )
-    } else {
-        return(
-            <div className={classes.containerM}>
-                <div className={classes.topBarM}>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        className={classes.button1}
-                        onClick={() => clickRestart()}
-                    >
-                        はじめから
-                    </Button>
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        className={classes.button1}
-                        onClick={() => clickRule()}
-                    >
-                        ルール
-                    </Button>
-                </div>
-                <div className={classes.gameAreaM}>
-                    <div className={classes.boardM}>
-                        <RuleBook />
-                        <Board />
-                    </div>    
-                    <div className={classes.ownPieceArea}>
-                        <OwnPieceArea isWhite={true} />
-                        <div className={classes.paramsAreaM}>
-                            <Params />
+                    <div className={classes.gameArea}>
+                        <div className={classes.leftParamsArea}>
+                            <OwnPieceArea isWhite={false} />
                             <Attack />
                         </div>
-                        <OwnPieceArea isWhite={false} />
+                        <div className={classes.board}>
+                                <RuleBook />
+                            <Board />
+                        </div>
+                        <div className={classes.rightParamsArea}>
+                            <div className={classes.paramsArea}>
+                                <Params />
+                            </div>
+                            <OwnPieceArea isWhite={true} />
+                        </div>
                     </div>
-                    
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return(
+                <div className={classes.containerM}>
+                    <div className={classes.topBarM}>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRestart()}
+                        >
+                            はじめから
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => setPrevPiece()}
+                        >
+                            一手戻る
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRule()}
+                        >
+                            ルール
+                        </Button>
+                    </div>
+                    <div className={classes.gameAreaM}>
+                        <div className={classes.boardM}>
+                            <RuleBook />
+                            <Board />
+                        </div>    
+                        <div className={classes.ownPieceArea}>
+                            <OwnPieceArea isWhite={true} />
+                            <div className={classes.paramsAreaM}>
+                                <Params />
+                                <Attack />
+                            </div>
+                            <OwnPieceArea isWhite={false} />
+                        </div>
+                        
+                    </div>
+                </div>
+            )
+        }
+    } else {
+        if(isWide) {
+            return(
+                <div className={classes.container}>
+                    <div className={classes.topBar}>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            // color={theme.palette.primary} 
+                            className={classes.button1}
+                            onClick={() => clickRestart()}
+                        >
+                            はじめから
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRule()}
+                        >
+                            ルール
+                        </Button>
+                    </div>
+                    <div className={classes.gameArea}>
+                        <div className={classes.leftParamsArea}>
+                            <OwnPieceArea isWhite={false} />
+                            <Attack />
+                        </div>
+                        <div className={classes.board}>
+                                <RuleBook />
+                            <Board />
+                        </div>
+                        <div className={classes.rightParamsArea}>
+                            <div className={classes.paramsArea}>
+                                <Params />
+                            </div>
+                            <OwnPieceArea isWhite={true} />
+                        </div>
+                    </div>
+                </div>
+            )
+        } else {
+            return(
+                <div className={classes.containerM}>
+                    <div className={classes.topBarM}>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRestart()}
+                        >
+                            はじめから
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            className={classes.button1}
+                            onClick={() => clickRule()}
+                        >
+                            ルール
+                        </Button>
+                    </div>
+                    <div className={classes.gameAreaM}>
+                        <div className={classes.boardM}>
+                            <RuleBook />
+                            <Board />
+                        </div>    
+                        <div className={classes.ownPieceArea}>
+                            <OwnPieceArea isWhite={true} />
+                            <div className={classes.paramsAreaM}>
+                                <Params />
+                                <Attack />
+                            </div>
+                            <OwnPieceArea isWhite={false} />
+                        </div>
+                        
+                    </div>
+                </div>
+            )
+        }
     }
-    
 }
 
 export default GameScreen;
