@@ -7,21 +7,34 @@ import useMedia from 'use-media';
 const useStyles = makeStyles((theme) => ({
     paramsContainer: {
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "column",
         width: 160,
+        height: 80,
+    },
+    paramsContainer2: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "column",
+        width: 160,
+        height: 180,
     },
     button1: {
         marginBottom: 10,
         width: 160,
       },
     button1M: {
-        margin: "0 10px 10px 10px",
-        padding: "6px 10px",
-        width: 140,
+        // margin: "0 10px 10px 10px",
+        // padding: 0,
+        // padding: "6px 10px",
+        width: 150,
     },
-    bunttonContainer: {
+    buttonContainer: {
+        width: 150,
+        display: "flex",
+        justifyContent: "space-between",
     },
     button2: {
         marginBottom: 10,
@@ -370,14 +383,14 @@ const Params = (props) => {
                             >→</Button>
         }
         return(
-            <div className={classes.paramsContainer}>
+            <div className={classes.paramsContainer2}>
                 <div>
                     {numString}手目
                 </div>
                 <div>
                     勝者 :　{winnerString}
                 </div> 
-                <div className={classes.bunttonContainer}>
+                <div className={classes.buttonContainer}>
                     {prevKifuButton}
                     {nextKifuButton}
                 </div>

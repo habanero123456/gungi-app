@@ -18,13 +18,15 @@ const useStyles = makeStyles((theme) => ({
   paperM: {
     position: 'absolute',
     width: 120,
-    margin: "0 0 0 20px",
+    margin: "-80px 0 0 20px",
   },
   content: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
     flexDirection: "column",
     width: 120,
+    height: 120,
+    backgroundColor: "#ffffff",
   },
   button1: {
     margin: 5,
