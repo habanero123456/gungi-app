@@ -121,13 +121,16 @@ const GameScreen = () => {
     const oppTurn = toggleWhose(turn);
 
     const setPrevPiece = () => {
-        console.log(kifu);
-        const prevKifu = Array.from(kifu);
-        prevKifu.pop();
-        setKifu(prevKifu);
-        setTurn(oppTurn);
-        setPieces(kifu[kifu.length - 2]);
+        if(kifu.length > 1){
+            console.log(kifu);
+            const prevKifu = Array.from(kifu);
+            prevKifu.pop();
+            setKifu(prevKifu);
+            setTurn(oppTurn);
+            setPieces(kifu[kifu.length - 2]);
+        }
     }
+
     if(phase === 3) {
         if(isWide) {
             return(
