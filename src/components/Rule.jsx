@@ -20,11 +20,12 @@ const useStyles = makeStyles((theme) => ({
     type: {
         display: "flex",
         flexWrap: "nowrap",
-	    justifyContent: "unset",
+	    // justifyContent: "unset",
+	    justifyContent: "center",
     },
     images: {
-        height: 250,
-        minWidth: 250,
+        height: 170,
+        minWidth: 170,
         backgroundSize: "contain",
     },
     contents: {
