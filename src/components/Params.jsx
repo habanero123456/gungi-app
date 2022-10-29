@@ -113,19 +113,18 @@ const Params = (props) => {
         }
 
         culcuTemplateSet(84, 0, 1);
-        culcuTemplateSet(74, 12, 1);
-        culcuTemplateSet(64, 6, 1);
-        culcuTemplateSet(63, 4, 1);
-        culcuTemplateSet(65, 4, 1);
-        culcuTemplateSet(62, 7, 1);
-        culcuTemplateSet(66, 7, 1);
-        culcuTemplateSet(61, 3, 1);
-        culcuTemplateSet(67, 3, 1);
-        culcuTemplateSet(80, 11, 1);
-        culcuTemplateSet(73, 1, 2, 10);
-        culcuTemplateSet(75, 2, 2, 10);
-        culcuTemplateSet(82, 8, 3, 5, 9);
-        culcuTemplateSet(86, 8, 3, 5, 9);
+        culcuTemplateSet(74, 10, 1);
+        culcuTemplateSet(64, 4, 1);
+        culcuTemplateSet(63, 5, 1);
+        culcuTemplateSet(65, 5, 1);
+        culcuTemplateSet(62, 9, 1);
+        culcuTemplateSet(66, 9, 1);
+        culcuTemplateSet(60, 4, 1);
+        culcuTemplateSet(68, 4, 1);
+        culcuTemplateSet(71, 6, 1);
+        culcuTemplateSet(77, 6, 1);
+        culcuTemplateSet(85, 1, 1);
+        culcuTemplateSet(83, 2, 1);
         
 
         // templateSetSub.splice(44, 1, {type: 5, whose: 1, level: 1});
@@ -217,8 +216,8 @@ const Params = (props) => {
         setPhase(3);
         setYomifu([]);
         setPieces(templateSet());
-        setWhitePieces([4, 4, 6, 10, 13]);
-        setBlackPieces([4, 4, 6, 10, 13]);
+        setWhitePieces([3, 3, 4, 4, 6, 7, 10, 10]);
+        setBlackPieces([3, 3, 4, 4, 6, 7, 10, 10]);
         setClickFlag(false);
         setTurn(1);
         setKifu([templateSet()])
@@ -256,7 +255,7 @@ const Params = (props) => {
                             className={button1String}
                             onClick={() => quickStart()}
                 >
-                    クイックスタート
+                    初期配置
                 </Button>
             </div>
             

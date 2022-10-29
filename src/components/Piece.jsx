@@ -129,47 +129,10 @@ const Piece = (props) => {
         setKifu(newKifu);
     }
 
-    const checkBou = () => {
-        let WFleg = false;
-        let BFleg = false;
-        const checkBou = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
-            let Wy = -1;
-            let By = -1;
-            if(!WFleg) {
-                if(currentValue.whose === 1) {
-                    if(currentValue.type === 11) {
-                        console.log(pieceIndex);
-                        Wy = (pieceIndex - (pieceIndex % 10)) / 10;
-                        WFleg = true;
-                        accumulator[0] = Wy;
-                    } 
-                }
-                if(pieceIndex === prevArray.length - 1) {
-                    accumulator.push(Wy);
-                }
-            }
-            if(!BFleg) {
-                if(currentValue.whose === 2) {
-                    if(currentValue.type === 11) {
-                        console.log(pieceIndex);
-                        By = (pieceIndex - (pieceIndex % 10)) / 10;
-                        BFleg = true;
-                        accumulator[1] = By;
-                    }
-                }
-                if(pieceIndex === prevArray.length - 1) {
-                    accumulator.push(By);
-                }
-            }
-            return accumulator;
-        }, [])
-        setBouCheck(checkBou);
-    }
-
     //攻撃
     useEffect(() => {
-        //キャンセル
         if (attack.defense === thisNum){
+            //キャンセル
             if(attack.num === 1) {
                 if(turn === 1) {
                     setTurn(2);
@@ -193,11 +156,47 @@ const Piece = (props) => {
                 if(offenseLevel === 3) {
                     //3が3をとる
                     if(offenseLevel === difenseLevel) {
-                        curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense].under});
-                        curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                        let underColor = 0;
+                        //0 黒黒黒　1黒黒白　2黒白黒　3黒白白 (白が攻めの場合)
+                        if(curPieces[attack.defense].under.whose !== oppTurn) { 
+                            if(curPieces[attack.defense].under.under.whose === oppTurn) {
+                                underColor = 1;
+                            }
+                        } else {
+                            if(curPieces[attack.defense].under.under.whose !== oppTurn) {
+                                underColor = 2;
+                            } else {
+                                underColor = 3;
+                            }
+                        }
+                        switch (underColor) {
+                            case 0 :
+                                curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: 1});
+                                curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                                break;
+                            case 1 :
+                                curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: 2, under: curPieces[attack.defense].under.under});
+                                curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                                break;
+                            case 2 :
+                                curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: 2, under: {type: curPieces[attack.defense].under.type, whose: oppTurn, level: 1}});
+                                curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                                break;
+                            case 3 :
+                                curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: 3, under: curPieces[attack.defense].under});
+                                curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                                break;
+                            default:
+                                break;
+                        }
+                        console.log(curPieces[attack.defense].under);
+                        // curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level, under: curPieces[attack.defense].under});
+                        // curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                    //3が2をとる
                     } else if (offenseLevel - difenseLevel === 1) {
                         curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 1, under: curPieces[attack.defense].under});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
+                    //3が1をとる
                     } else {
                         curPieces.splice(attack.defense, 1, {type: curPieces[attack.offense].type, whose: oppTurn, level: curPieces[attack.offense].level - 2});
                         curPieces.splice(attack.offense, 1, curPieces[attack.offense].under);
@@ -220,11 +219,10 @@ const Piece = (props) => {
                 addKifu(curPieces);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
                 setClickFlag(!clickFlag);
-                checkBou();
             }
             //ツケる
             if(attack.num === 3) {
-                //新
+                //手駒新
                 let newPiece;
                 if(attack.offense >= 90) {
                     newPiece = {
@@ -287,7 +285,6 @@ const Piece = (props) => {
                 addKifu(curPieces);
                 setYomifu(`${x + 1}-${y + 1}-${curPieces[thisNum].level}-${kanji[curPieces[thisNum].type]}`);
                 setClickFlag(!clickFlag);
-                checkBou();
             }
             setPieces(curPieces);
             setSelect({num: -1, type: -1, level: 0});
@@ -323,7 +320,6 @@ const Piece = (props) => {
     const thisPieceString = `piece${thisPiece.type}-${thisPiece.whose}-${thisUnderColor}`;
 
     const searchCanMove = () => {
-
         const moveCalculate = (xy, whose) => {
             if (whose === 1){
                 const dx = xy[0];
@@ -361,27 +357,27 @@ const Piece = (props) => {
             })
             return checkCanMove;
         }
-        const checkRideable = (array) => {
-            let checkCanMove = [];
-            const alones = [0, 12, 13];
-            if(alones.includes(thisPiece.type)) {
-                checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
-                    for(let i = 0; i < array.length; i++) {
-                        if (array[i] === pieceIndex) {
-                            accumulator.push({type: currentValue.type, whose: currentValue.whose, index: pieceIndex});
-                        }
-                    }
-                    return accumulator;
-                }, []).filter((item) => {
-                    return item.whose !== turn;
-                }).map((piece) => {
-                    return piece.index;
-                })
-            } else {
-                checkCanMove = array;
-            }
-            return checkCanMove;
-        }
+        // const checkRideable = (array) => {
+        //     let checkCanMove = [];
+        //     const alones = [0, 12, 13];
+        //     if(alones.includes(thisPiece.type)) {
+        //         checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
+        //             for(let i = 0; i < array.length; i++) {
+        //                 if (array[i] === pieceIndex) {
+        //                     accumulator.push({type: currentValue.type, whose: currentValue.whose, index: pieceIndex});
+        //                 }
+        //             }
+        //             return accumulator;
+        //         }, []).filter((item) => {
+        //             return item.whose !== turn;
+        //         }).map((piece) => {
+        //             return piece.index;
+        //         })
+        //     } else {
+        //         checkCanMove = array;
+        //     }
+        //     return checkCanMove;
+        // }
 
         const checkLevel = (array) => {
             const checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
@@ -392,37 +388,21 @@ const Piece = (props) => {
                 }
                 return accumulator;
             }, []).filter((item) => {
-                if(thisPiece.type === 0 || thisPiece.type === 12 || thisPiece.type === 13) {
-                    return true;
-                } else if(thisPiece.type === 9){
-                    if(thisPiece.level === 3){
-                        if(thisPiece.level !== item.level){
-                            return true;
-                        }
-                    } else {
-                        if(thisPiece.level >= item.level) {
-                            return true;
-                          }
-                    }
-                //通常駒
+                if(thisPiece.level !== 3) {
+                    if(thisPiece.level >= item.level) {
+                        return true;
+                    n}
+                //レベル３の時
                 } else {
-                    if(thisPiece.level !== 3) {
+                    if(thisPiece.whose !== item.whose) {
                         if(thisPiece.level >= item.level) {
                             return true;
-                          }
-                    //レベル３の時
+                            }
                     } else {
-                        if(thisPiece.whose !== item.whose) {
-                            if(thisPiece.level >= item.level) {
-                                return true;
-                              }
-                        } else {
-                            if(item.level !== 3) {
-                                return true;
-                              }
-                        }
+                        if(item.level !== 3) {
+                            return true;
+                            }
                     }
-                    
                 }
             }).map((piece) => {
                 return piece.index;
@@ -437,16 +417,185 @@ const Piece = (props) => {
                 return false;
             }
         }
+
+        const moveNum = (num) => {
+            switch (num) {
+                case 1 :
+                    return moveCalculate([0, -1], thisPiece.whose);
+                case 2 :
+                    return moveCalculate([0, 1], thisPiece.whose);
+                case 3 :
+                    return moveCalculate([1, 0], thisPiece.whose);
+                case 4 :
+                    return moveCalculate([-1, 0], thisPiece.whose);
+                case 5 :
+                    return moveCalculate([1, -1], thisPiece.whose);
+                case 6 :
+                    return moveCalculate([-1, -1], thisPiece.whose);
+                case 7 :
+                    return moveCalculate([1, 1], thisPiece.whose);
+                case 8 :
+                    return moveCalculate([-1, 1], thisPiece.whose);
+                case 9 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose))){
+                        return moveCalculate([0, -2], thisPiece.whose);
+                    }
+                    break;
+                case 10 :
+                    if(isPiece(moveCalculate([0, 1], thisPiece.whose))){
+                        return moveCalculate([0, 2], thisPiece.whose);
+                    }
+                    break;
+                case 11 :
+                    if(isPiece(moveCalculate([1, 0], thisPiece.whose))){
+                        return moveCalculate([2, 0], thisPiece.whose);
+                    }
+                    break;
+                case 12 :
+                    if(isPiece(moveCalculate([-1, 0], thisPiece.whose))){
+                        return moveCalculate([-2, 0], thisPiece.whose);
+                    }
+                    break;
+                case 13 :
+                    if(isPiece(moveCalculate([1, -1], thisPiece.whose))){
+                        return moveCalculate([2, -2], thisPiece.whose);
+                    }
+                    break;
+                case 14 :
+                    if(isPiece(moveCalculate([-1, -1], thisPiece.whose))){
+                        return moveCalculate([-2, -2], thisPiece.whose);
+                    }
+                    break;
+                case 15 :
+                    if(isPiece(moveCalculate([1, 1], thisPiece.whose))){
+                        return moveCalculate([2, 2], thisPiece.whose);
+                    }
+                    break;
+                case 16 :
+                    if(isPiece(moveCalculate([-1, 1], thisPiece.whose))){
+                        return moveCalculate([2, 2], thisPiece.whose);
+                    }
+                    break;
+                case 17 :
+                    return moveCalculate([1, -2], thisPiece.whose);
+                case 18 :
+                    return moveCalculate([-1, -2], thisPiece.whose);
+                case 19 :
+                    return;
+                case 20 :
+                    return;
+                case 21 :
+                    return;
+                case 22 :
+                    return;
+                case 23 :
+                    return;
+                case 24 :
+                    return;
+                case 25 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose)) && isPiece(moveCalculate([0, -2], thisPiece.whose))){
+                        return moveCalculate([0, -3], thisPiece.whose);
+                    }
+                    break;
+                case 26 :
+                    if(isPiece(moveCalculate([0, 1], thisPiece.whose)) && isPiece(moveCalculate([0, 2], thisPiece.whose))){
+                        return moveCalculate([0, 3], thisPiece.whose);
+                    }
+                    break;
+                case 27 :
+                    if(isPiece(moveCalculate([1, 0], thisPiece.whose)) && isPiece(moveCalculate([2, 0], thisPiece.whose))){
+                        return moveCalculate([3, 0], thisPiece.whose);
+                    }
+                    break;
+                case 28 :
+                    if(isPiece(moveCalculate([-1, 0], thisPiece.whose)) && isPiece(moveCalculate([-2, 0], thisPiece.whose))){
+                        return moveCalculate([-3, 0], thisPiece.whose);
+                    }
+                    break;
+                case 29 :
+                    if(isPiece(moveCalculate([1, -1], thisPiece.whose)) && isPiece(moveCalculate([2, -2], thisPiece.whose))){
+                        return moveCalculate([3, -3], thisPiece.whose);
+                    }
+                    break;
+                case 30 :
+                    if(isPiece(moveCalculate([-1, -1], thisPiece.whose)) && isPiece(moveCalculate([-2, -2], thisPiece.whose))){
+                        return moveCalculate([-3, -3], thisPiece.whose);
+                    }
+                    break;
+                case 31 :
+                    if(isPiece(moveCalculate([1, 1], thisPiece.whose)) && isPiece(moveCalculate([2, 2], thisPiece.whose))){
+                        return moveCalculate([2, 2], thisPiece.whose);
+                    }
+                    break;
+                case 32 :
+                    if(isPiece(moveCalculate([-1, 1], thisPiece.whose)) && isPiece(moveCalculate([-2, 2], thisPiece.whose))){
+                        return moveCalculate([-3, 3], thisPiece.whose);
+                    }
+                    break;
+                case 33 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([0, -2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([0, -3], thisPiece.whose))) {
+                        return moveCalculate([0, -4], thisPiece.whose);
+                    }
+                    break; 
+                case 34 :
+                    if(isPiece(moveCalculate([0, 1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([0, 2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([0, 3], thisPiece.whose))) {
+                        return moveCalculate([0, 4], thisPiece.whose);
+                    }
+                    break; 
+                case 35 :
+                    if(isPiece(moveCalculate([1, -1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([2, -2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([3, -3], thisPiece.whose))) {
+                        return moveCalculate([4, -4], thisPiece.whose);
+                    }
+                    break; 
+                case 36 :
+                    if(isPiece(moveCalculate([-1, -1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([-2, -2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([-3, -3], thisPiece.whose))) {
+                        return moveCalculate([-4, -4], thisPiece.whose);
+                    }
+                    break; 
+                case 37 :
+                    if(isPiece(moveCalculate([1, 1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([2, 2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([3, 3], thisPiece.whose))) {
+                        return moveCalculate([4, 4], thisPiece.whose);
+                    }
+                    break; 
+                case 38 :
+                    if(isPiece(moveCalculate([-1, 1], thisPiece.whose)) 
+                        && isPiece(moveCalculate([-2, 2], thisPiece.whose)) 
+                        && isPiece(moveCalculate([-3, 3], thisPiece.whose))) {
+                        return moveCalculate([-4, 4], thisPiece.whose);
+                    }
+                    break; 
+                default:
+                    break;
+                }
+        }
+
         let canMoveNum = [];
 
         switch (thisPiece.type) {
-            case 0 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                                    moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([1, 1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose)];
+            case 0 : //師
+                // console.log(moveNum(1));
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(1), moveNum(2),moveNum(3),moveNum(4),moveNum(5),moveNum(6),moveNum(7),moveNum(8)];
+                }
+                if(thisPiece.level >= 2) {
+                    canMoveNum.push(...[moveNum(9), moveNum(10)]);
+                }
+                if(thisPiece.level === 3) {
+                    canMoveNum.push(...[moveNum(25), moveNum(26), moveNum(27), moveNum(28),
+                                        moveNum(29), moveNum(30), moveNum(31), moveNum(32),]);
                 }
                 break;
-            case 1 :
+            case 1 : //大
                 if(thisPiece.level !== 0) {
                     for(let i = 1; i <= 9; i++) {
                         const newMove = moveCalculate([i, 0], thisPiece.whose);
@@ -476,15 +625,17 @@ const Piece = (props) => {
                             break;
                         }
                     }
+                    canMoveNum.push(...[moveNum(5), moveNum(6), moveNum(7), moveNum(8)]);
+
                     if(thisPiece.level >= 2) {
-                        canMoveNum.push(moveCalculate([1, 1], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([1, -1], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([-1, 1], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([-1, -1], thisPiece.whose));
+                        canMoveNum.push(...[moveNum(13), moveNum(14), moveNum(15), moveNum(16)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(29), moveNum(30), moveNum(31), moveNum(32)]);
                     }
                 }
                 break;
-            case 2 :
+            case 2 : //中
                 if(thisPiece.level !== 0) {
                     for(let i = 1; i <= 9; i++) {
                         const newMove = moveCalculate([i, i], thisPiece.whose);
@@ -514,160 +665,153 @@ const Piece = (props) => {
                             break;
                         }
                     }
+                    canMoveNum.push(...[moveNum(1), moveNum(2), moveNum(3), moveNum(4)]);
+
                     if(thisPiece.level >= 2) {
-                        canMoveNum.push(moveCalculate([0, 1], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([0, -1], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([1, 0], thisPiece.whose));
-                        canMoveNum.push(moveCalculate([-1, 0], thisPiece.whose));
+                        canMoveNum.push(...[moveNum(9), moveNum(10), moveNum(11), moveNum(12)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(25), moveNum(26), moveNum(27), moveNum(28)]);
                     }
                 }
                 break;
-            case 3 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                                    moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([1, 0], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                                    moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
-                    if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([2, 0], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, 0], thisPiece.whose));
-                    }
-                }
-                break;
-            case 4 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose)];
-                    if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[1])) {
-                        canMoveNum.push(moveCalculate([0, 2], thisPiece.whose));
-                    }
-                }
-                break;
-            case 5 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([1, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose)];
-                    if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([2, 2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[1])) {
-                        canMoveNum.push(moveCalculate([2, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([-2, 2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, -2], thisPiece.whose));
-                    }
-                }
-                break;
-            case 6 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), 
-                    moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
-                    if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([2, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, -2], thisPiece.whose));
-                    }
-                }
-                break;
-            case 7 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
-                    if(isPiece(canMoveNum[0])) {
-                        canMoveNum.push(moveCalculate([0, 2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[1])) {
-                        canMoveNum.push(moveCalculate([0, -2], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[2])) {
-                        canMoveNum.push(moveCalculate([2, 0], thisPiece.whose));
-                    }
-                    if(isPiece(canMoveNum[3])) {
-                        canMoveNum.push(moveCalculate([-2, 0], thisPiece.whose));
-                    }
-                }
-                break;
-            case 8 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([1, 2], thisPiece.whose), moveCalculate([1, -2], thisPiece.whose), moveCalculate([-1, 2], thisPiece.whose), moveCalculate([-1, -2], thisPiece.whose), 
-                                        moveCalculate([2, 1], thisPiece.whose), moveCalculate([2, -1], thisPiece.whose), moveCalculate([-2, 1], thisPiece.whose), moveCalculate([-2, -1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([1, 2], thisPiece.whose), moveCalculate([1, -2], thisPiece.whose), moveCalculate([-1, 2], thisPiece.whose), moveCalculate([-1, -2], thisPiece.whose), 
-                                    moveCalculate([2, 1], thisPiece.whose), moveCalculate([2, -1], thisPiece.whose), moveCalculate([-2, 1], thisPiece.whose), moveCalculate([-2, -1], thisPiece.whose),
-                                    moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([0, -1], thisPiece.whose)];
-                }
-                break;
-            case 9 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                                    moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([1, 1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose)];
-                } else if(thisPiece.level >= 2) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                    moveCalculate([1, -1], thisPiece.whose), moveCalculate([-1, -1], thisPiece.whose), moveCalculate([1, 1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose)];
-                }
-                break;
-            case 10 :
+            case 3 : //小
                 if(thisPiece.level !== 0) {
-                    for(let i = 1; i <= 9; i++) {
-                        const newMove = moveCalculate([0, i], thisPiece.whose);
-                        canMoveNum.push(newMove);
-                        if(!isPiece(newMove)) {
-                            break;
-                        }
+                    canMoveNum = [moveNum(1), moveNum(2),moveNum(3),moveNum(4),
+                                  moveNum(5),moveNum(6)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(9), moveNum(10), moveNum(11), 
+                                            moveNum(12), moveNum(13), moveNum(14)]);
                     }
-                    for(let i = 1; i <= 9; i++) {
-                        const newMove = moveCalculate([0, -i], thisPiece.whose);
-                        canMoveNum.push(newMove);
-                        if(!isPiece(newMove)) {
-                            break;
-                        }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(25), moveNum(26),moveNum(27),
+                                            moveNum(28), moveNum(29), moveNum(30)]);
                     }
                 }
+                break;
+            case 4 : //兵
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(1), moveNum(2)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(9), moveNum(10)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(25), moveNum(26)]);
+                    }
+                }
+                break;
+            case 5 : //侍
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(1), moveNum(2),moveNum(5),moveNum(6)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(9), moveNum(10), 
+                                            moveNum(13), moveNum(14)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(25), moveNum(29), moveNum(30)]);
+                    }
+                }
+                break;
+            case 6 : //忍
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(5), moveNum(6),moveNum(7),moveNum(8),
+                                  moveNum(13), moveNum(14),moveNum(15),moveNum(16)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(29), moveNum(30), 
+                                            moveNum(31),moveNum(32)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(35), moveNum(36), 
+                                            moveNum(37),moveNum(38)]);
+                    }
+                }
+                break;
+            case 7 :　//馬
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(1), moveNum(2),moveNum(3),moveNum(4),
+                                  moveNum(9), moveNum(10)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(11), moveNum(12), 
+                                            moveNum(25),moveNum(26)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(27), moveNum(28), 
+                                            moveNum(33),moveNum(34)]);
+                    }
+                }
+                break;
+            case 8 : //弓
+                
+                break;
+            case 9 : //砦
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(1), moveNum(3), moveNum(4),
+                                moveNum(7), moveNum(8)];
+                
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(9), moveNum(11), moveNum(12), 
+                                            moveNum(15), moveNum(16)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(25), moveNum(27), moveNum(28), 
+                                            moveNum(31), moveNum(32)]);
+                    }
+                }
+                break;
+            case 10 : //槍
+            if(thisPiece.level !== 0) {
+                canMoveNum = [moveNum(1), moveNum(2),moveNum(5),
+                              moveNum(6),moveNum(9)];
+            
                 if(thisPiece.level >= 2) {
-                    canMoveNum.push(moveCalculate([1, 0], thisPiece.whose));
-                    canMoveNum.push(moveCalculate([-1, 0], thisPiece.whose));
+                    console.log(canMoveNum);
+                    canMoveNum.push(...[moveNum(10),moveNum(13), 
+                                        moveNum(14), moveNum(25)]);
                 }
-                break;
-            case 11 :
-                canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose)];
-                break;
-            case 12 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, -1], thisPiece.whose), moveCalculate([1, 1], thisPiece.whose), moveCalculate([-1, 1], thisPiece.whose), 
-                                    moveCalculate([1, -2], thisPiece.whose), moveCalculate([-1, -2], thisPiece.whose)];
+                if(thisPiece.level === 3) {
+                    canMoveNum.push(...[moveNum(29), moveNum(30), 
+                                        moveNum(33), moveNum(34)]);
                 }
+            }
                 break;
-            case 13 :
-                if(thisPiece.level === 1) {
-                    canMoveNum = [moveCalculate([0, 1], thisPiece.whose), moveCalculate([1, 0], thisPiece.whose), moveCalculate([-1, 0], thisPiece.whose), 
-                                    moveCalculate([1, -2], thisPiece.whose), moveCalculate([-1, -2], thisPiece.whose)];
+            case 11 : //謀
+            if(thisPiece.level !== 0) {
+                canMoveNum = [moveNum(2), moveNum(5),moveNum(6)];
+            
+                if(thisPiece.level >= 2) {
+                    console.log(canMoveNum);
+                    canMoveNum.push(...[moveNum(10),moveNum(13), 
+                                        moveNum(14)]);
                 }
+                if(thisPiece.level === 3) {
+                    canMoveNum.push(...[moveNum(26), moveNum(30), moveNum(33)]);
+                }
+            }
+                break;
+            case 12 : //砲
+                
+                break;
+            case 13 : //筒
+                
+                break;
+            default:
                 break;
         }
+        console.log(canMoveNum);
         const checkedCanMove = isIncludeKing(canMoveNum);
-        const checkedRideable = checkRideable(checkedCanMove);
-        const checkedLevel = checkLevel(checkedRideable);
+        // const checkedRideable = checkRideable(checkedCanMove);
+        const checkedLevel = checkLevel(checkedCanMove);
         setCanMove(checkedLevel);
     }
 
@@ -721,7 +865,7 @@ const Piece = (props) => {
                     }
                     setClickFlag(!clickFlag);
                     addKifu(curPieces);
-                    checkBou();
+                    // checkBou();
                 }
                 //自駒
                 else if (curPieces[thisNum].whose === turn){
@@ -872,7 +1016,7 @@ const Piece = (props) => {
             }
             console.log(firstArata);
         }
-            console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
+        console.log({...curPieces[thisNum], thisNum: thisNum, params: thisPieceString});
     }
     return(
         <button className={squareString} onClick={() =>{clickPiece()}}>
