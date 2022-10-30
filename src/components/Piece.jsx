@@ -391,7 +391,7 @@ const Piece = (props) => {
                 if(thisPiece.level !== 3) {
                     if(thisPiece.level >= item.level) {
                         return true;
-                    n}
+                    }
                 //レベル３の時
                 } else {
                     if(thisPiece.whose !== item.whose) {
