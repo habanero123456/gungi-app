@@ -410,11 +410,29 @@ const Piece = (props) => {
             return checkCanMove;
         }
 
-        const isPiece = (num) => {
-            if(num >= 0 && num <= 88) {
-                return curPieces[num].whose === 0;
+        const isPiece = (num, exception) => {
+            if(exception) {
+                console.log(thisNum);
+                console.log(num);
+                if(num >= 0 && num <= 88) {
+                    if(curPieces[num].whose !== 0) {
+                        if(curPieces[thisNum].level >= curPieces[num].level) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if(num >= 0 && num <= 88) {
+                    return curPieces[num].whose === 0;
+                } else {
+                    return false;
+                }
             }
         }
 
@@ -473,7 +491,7 @@ const Piece = (props) => {
                     break;
                 case 16 :
                     if(isPiece(moveCalculate([-1, 1], thisPiece.whose))){
-                        return moveCalculate([2, 2], thisPiece.whose);
+                        return moveCalculate([-2, 2], thisPiece.whose);
                     }
                     break;
                 case 17 :
@@ -524,7 +542,7 @@ const Piece = (props) => {
                     break;
                 case 31 :
                     if(isPiece(moveCalculate([1, 1], thisPiece.whose)) && isPiece(moveCalculate([2, 2], thisPiece.whose))){
-                        return moveCalculate([2, 2], thisPiece.whose);
+                        return moveCalculate([3, 3], thisPiece.whose);
                     }
                     break;
                 case 32 :
@@ -572,6 +590,62 @@ const Piece = (props) => {
                         && isPiece(moveCalculate([-2, 2], thisPiece.whose)) 
                         && isPiece(moveCalculate([-3, 3], thisPiece.whose))) {
                         return moveCalculate([-4, 4], thisPiece.whose);
+                    }
+                    break; 
+                case 41 :
+                    return moveCalculate([3, -4], thisPiece.whose);
+                case 42 :
+                    return moveCalculate([-3, -4], thisPiece.whose);
+                case 90 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)){
+                        return moveCalculate([0, -2], thisPiece.whose);
+                    }
+                    break; 
+                case 170 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    &&isPiece(moveCalculate([1, -1], thisPiece.whose), true)){
+                        return moveCalculate([1, -2], thisPiece.whose);
+                    }
+                    break; 
+                case 180 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    &&isPiece(moveCalculate([-1, -1], thisPiece.whose), true)){
+                        return moveCalculate([-1, -2], thisPiece.whose);
+                    }
+                    break;
+                case 250 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -2], thisPiece.whose), true)){
+                        return moveCalculate([0, -3], thisPiece.whose);
+                    }
+                    break;
+                case 330 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -2], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -3], thisPiece.whose), true)){
+                        return moveCalculate([0, -4], thisPiece.whose);
+                    }
+                    break; 
+                case 39 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([1, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([1, -2], thisPiece.whose), true)){
+                        return moveCalculate([2, -3], thisPiece.whose);
+                    }
+                    break; 
+                case 40 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([-1, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([-1, -2], thisPiece.whose), true)){
+                        return moveCalculate([-2, -3], thisPiece.whose);
+                    }
+                    break; 
+                case 43 :
+                    if(isPiece(moveCalculate([0, -1], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -2], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -3], thisPiece.whose), true)
+                    && isPiece(moveCalculate([0, -4], thisPiece.whose), true)){
+                        return moveCalculate([0, -5], thisPiece.whose);
                     }
                     break; 
                 default:
@@ -734,7 +808,7 @@ const Piece = (props) => {
                     }
                 }
                 break;
-            case 7 :　//馬
+            case 7 : //馬
                 if(thisPiece.level !== 0) {
                     canMoveNum = [moveNum(1), moveNum(2),moveNum(3),moveNum(4),
                                   moveNum(9), moveNum(10)];
@@ -751,7 +825,20 @@ const Piece = (props) => {
                 }
                 break;
             case 8 : //弓
+                if(thisPiece.level !== 0) {
+                    canMoveNum = [moveNum(2),moveNum(90),
+                                moveNum(170),moveNum(180)];
                 
+                    if(thisPiece.level >= 2) {
+                        console.log(canMoveNum);
+                        canMoveNum.push(...[moveNum(250), moveNum(39), 
+                                            moveNum(40), moveNum(10)]);
+                    }
+                    if(thisPiece.level === 3) {
+                        canMoveNum.push(...[moveNum(26), moveNum(330), 
+                                            moveNum(41), moveNum(42)]);
+                    }
+                }
                 break;
             case 9 : //砦
                 if(thisPiece.level !== 0) {
@@ -787,11 +874,11 @@ const Piece = (props) => {
                 break;
             case 11 : //謀
             if(thisPiece.level !== 0) {
-                canMoveNum = [moveNum(2), moveNum(5),moveNum(6)];
+                canMoveNum = [moveNum(2), moveNum(5), moveNum(6)];
             
                 if(thisPiece.level >= 2) {
                     console.log(canMoveNum);
-                    canMoveNum.push(...[moveNum(10),moveNum(13), 
+                    canMoveNum.push(...[moveNum(10), moveNum(13), 
                                         moveNum(14)]);
                 }
                 if(thisPiece.level === 3) {
@@ -800,10 +887,32 @@ const Piece = (props) => {
             }
                 break;
             case 12 : //砲
-                
+            if(thisPiece.level !== 0) {
+                canMoveNum = [moveNum(2), moveNum(3), moveNum(4), moveNum(250)];
+            
+                if(thisPiece.level >= 2) {
+                    console.log(canMoveNum);
+                    canMoveNum.push(...[moveNum(10), moveNum(11), 
+                                        moveNum(12), moveNum(330)]);
+                }
+                if(thisPiece.level === 3) {
+                    canMoveNum.push(...[moveNum(26), moveNum(27), 
+                                        moveNum(28), moveNum(43)]);
+                }
+            }
                 break;
             case 13 : //筒
-                
+            if(thisPiece.level !== 0) {
+                canMoveNum = [moveNum(7), moveNum(8), moveNum(90)];
+            
+                if(thisPiece.level >= 2) {
+                    console.log(canMoveNum);
+                    canMoveNum.push(...[moveNum(15), moveNum(16), moveNum(250)]);
+                }
+                if(thisPiece.level === 3) {
+                    canMoveNum.push(...[moveNum(31), moveNum(32), moveNum(330)]);
+                }
+            }
                 break;
             default:
                 break;
@@ -895,12 +1004,12 @@ const Piece = (props) => {
                         setWinner(turn);
                         setCurKifu(kifu.length);
                         setPhase(4)
-                    } else if(select.type === 9) {
-                        setModal(2);
-                        setAttack({num: -1, offense: select.num, defense: thisNum});
-                    } else if(select.type === 0 || select.type === 9 || select.type > 10) {
-                        setModal(3);
-                        setAttack({num: -1, offense: select.num, defense: thisNum});
+                    // } else if(select.type === 9) {
+                    //     setModal(2);
+                    //     setAttack({num: -1, offense: select.num, defense: thisNum});
+                    // } else if(select.type === 0 || select.type === 9 || select.type > 10) {
+                    //     setModal(3);
+                    //     setAttack({num: -1, offense: select.num, defense: thisNum});
                     } else if (select.level !== 3){
                         if(select.level >= curPieces[thisNum].level) {
                             setModal(1);

@@ -121,7 +121,9 @@ const Params = (props) => {
         culcuTemplateSet(66, 9, 1);
         culcuTemplateSet(60, 4, 1);
         culcuTemplateSet(68, 4, 1);
-        culcuTemplateSet(71, 6, 1);
+        culcuTemplateSet(71, 7, 1);
+        culcuTemplateSet(72, 8, 1);
+        culcuTemplateSet(76, 8, 1);
         culcuTemplateSet(77, 6, 1);
         culcuTemplateSet(85, 1, 1);
         culcuTemplateSet(83, 2, 1);
@@ -216,8 +218,8 @@ const Params = (props) => {
         setPhase(3);
         setYomifu([]);
         setPieces(templateSet());
-        setWhitePieces([3, 3, 4, 4, 6, 7, 10, 10]);
-        setBlackPieces([3, 3, 4, 4, 6, 7, 10, 10]);
+        setWhitePieces([3, 3, 4, 6, 7, 10, 10]);
+        setBlackPieces([3, 3, 4, 6, 7, 10, 10]);
         setClickFlag(false);
         setTurn(1);
         setKifu([templateSet()])
