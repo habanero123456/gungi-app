@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 170,
         backgroundSize: "contain",
     },
+    movePict: {
+        height: 200,
+        minWidth: 300,
+        backgroundSize: "contain",
+    },
     contents: {
     },
   }));
@@ -51,7 +56,10 @@ const Rule = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>
-                        <div className={classes.type}>
+                    <div className={classes.type}>
+                            <div className={classes.movePict} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/ruleImg/movePict.jpg)`}}></div>
+                    </div>
+                        {/* <div className={classes.type}>
                             <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move00-1.png)`}}></div>
                         </div>
                         <div className={classes.type}>
@@ -101,7 +109,7 @@ const Rule = () => {
                         </div>
                         <div className={classes.type}>
                             <div className={classes.images} style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/move13-1.png)`}}></div>
-                        </div>
+                        </div> */}
                     </Typography>
                 </AccordionDetails>
             </Accordion>
@@ -129,20 +137,24 @@ const Rule = () => {
                     全ての駒を配置し終えたら、白駒が先行でゲームを開始するが、黒駒が「済み」を宣言したあとに白駒が配置を続けた場合、黒駒が先行になる。
                     <br />
                     <br />
-                    5.駒を取られた場合、その駒は二度と盤上には戻ってこれない。手駒はいつでも盤上に置くことができるが、自分の陣地内にしか置けない。
+                    5.手駒は相手の陣地より手前(自分から見て手前6段)内に置くことができる。これを新（あらた）という。
+                    6.駒を取られた場合、その駒は二度と盤上には戻ってこれない。手駒はいつでも盤上に置くことができるが、自分の陣地内にしか置けない。
                     <br />
                     <br />
-                    6.駒は3つまで重ねることができる。駒を重ねた場合下の駒は上の駒を無くさない限り動かすことはできない。
+                    7.駒は3つまで重ねることができる。駒を重ねた場合下の駒は上の駒を無くさない限り動かすことはできない。
                     <br />
                     <br />
-                    7.駒を重ねることで得られる効果は以下の通りである。
-                    　2,3段重ね・上に重ねた駒の行動範囲を広げることができる。また、同じ段以上の駒からしか攻撃を受けない(師、砲、筒は除く)。
+                    8.駒を重ねることで得られる効果は以下の通りである。
+                      ・2,3段重ね・上に重ねた駒の行動範囲を広げることができる。
+                      ・同じ段以上の駒からしか攻撃を受けない。
                     <br />
                     <br />
-                    8.相手の駒を取らずにその駒に自分の駒を重ねる（ツケる）ことができる。ただし、相手自分の共に師、砲、筒の上に駒を重ねることはできず、また、手駒を置く時に相手の駒の上に直接置くこともできない。
+                    9.相手の駒は取る以外にその駒に自分の駒を重ねる（ツケる）ことができる。
+                    取る場合一番上の駒のみを除外する。また、三段の駒を取る場合、重なった相手の駒をすべて取り、自駒のみが残る。
+                    相手自分の共に師の上に駒を重ねることはできず、また、手駒を置く時に相手の駒の上に直接置くこともできない。
                     <br />
                     大将や槍など2マス以上移動できる駒は移動途中にある駒を飛び越えて移動することはできない。
-                    ただし砲と筒の前方移動や弓は飛び越えて移動できる。
+                    ただし弓、砲、筒は前方移動のみ、同じ段以下なら飛び越えて移動できる。
                     </Typography>
                 </AccordionDetails>
             </Accordion>

@@ -357,27 +357,6 @@ const Piece = (props) => {
             })
             return checkCanMove;
         }
-        // const checkRideable = (array) => {
-        //     let checkCanMove = [];
-        //     const alones = [0, 12, 13];
-        //     if(alones.includes(thisPiece.type)) {
-        //         checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
-        //             for(let i = 0; i < array.length; i++) {
-        //                 if (array[i] === pieceIndex) {
-        //                     accumulator.push({type: currentValue.type, whose: currentValue.whose, index: pieceIndex});
-        //                 }
-        //             }
-        //             return accumulator;
-        //         }, []).filter((item) => {
-        //             return item.whose !== turn;
-        //         }).map((piece) => {
-        //             return piece.index;
-        //         })
-        //     } else {
-        //         checkCanMove = array;
-        //     }
-        //     return checkCanMove;
-        // }
 
         const checkLevel = (array) => {
             const checkCanMove = curPieces.reduce((accumulator, currentValue, pieceIndex, prevArray) => {
@@ -657,16 +636,17 @@ const Piece = (props) => {
 
         switch (thisPiece.type) {
             case 0 : //師
-                // console.log(moveNum(1));
                 if(thisPiece.level !== 0) {
-                    canMoveNum = [moveNum(1), moveNum(2),moveNum(3),moveNum(4),moveNum(5),moveNum(6),moveNum(7),moveNum(8)];
+                    canMoveNum = [moveNum(1), moveNum(2), moveNum(3), moveNum(4), 
+                                  moveNum(5), moveNum(6), moveNum(7), moveNum(8)];
                 }
                 if(thisPiece.level >= 2) {
-                    canMoveNum.push(...[moveNum(9), moveNum(10)]);
+                    canMoveNum.push(...[moveNum(9), moveNum(10), moveNum(11), moveNum(12),
+                                        moveNum(13), moveNum(14), moveNum(15), moveNum(16)]);
                 }
                 if(thisPiece.level === 3) {
                     canMoveNum.push(...[moveNum(25), moveNum(26), moveNum(27), moveNum(28),
-                                        moveNum(29), moveNum(30), moveNum(31), moveNum(32),]);
+                                        moveNum(29), moveNum(30), moveNum(31), moveNum(32)]);
                 }
                 break;
             case 1 : //大
